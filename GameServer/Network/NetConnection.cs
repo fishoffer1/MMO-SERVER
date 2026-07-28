@@ -42,7 +42,7 @@ namespace GameServer.Network
 
         private void Len_DataReceived(byte[] buffer)
         {
-            DataReceived(this, buffer);
+            DataReceived?.Invoke(this, buffer);
         }
         public void Close()
         {
@@ -57,7 +57,7 @@ namespace GameServer.Network
 
             socket.Close();
             socket = null;
-            OnDisconnected(this);
+            OnDisconnected?.Invoke(this);
         }
     }
 }
