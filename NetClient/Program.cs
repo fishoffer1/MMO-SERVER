@@ -1,8 +1,9 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using System.Net;
 using System.Net.Sockets;
+using System.Numerics;
 using System.Text;
-
+using Google.Protobuf;
 namespace TestClient
 {
     internal class Program
@@ -19,20 +20,26 @@ namespace TestClient
 
             string text = "你好啊，服务端";
             //字符串转字节数组
-            byte[] bytes = Encoding.UTF8.GetBytes(text);
-            sendMessage(socket, bytes);
-            sendMessage(socket, Encoding.UTF8.GetBytes("这是第二句话"));
-            Console.ReadKey();
-            while (true)
-            {
-                string input = Console.ReadLine();
-                if (input == "exit")
-                {
-                    break;
-                }
-                sendMessage(socket, Encoding.UTF8.GetBytes(input));
-            }
+            //byte[] bytes = Encoding.UTF8.GetBytes(text);
+            //sendMessage(socket, bytes);
+            //sendMessage(socket, Encoding.UTF8.GetBytes("这是第二句话"));
 
+            //while (true)
+            //{
+            //    string input = Console.ReadLine();
+            //    if (input == "exit")
+            //    {
+            //        break;
+            //    }
+
+            //    sendMessage(socket, Encoding.UTF8.GetBytes(input));
+            //}
+            User user = new User();
+            user.Id = 1;
+            user.Name = "Alice";
+            //Vector3 vector = new Vector3(X = 100, Y = 200, Z = 300); //该引用被编译器自身的Vector3类型所隐藏，无法调用到proto的转字节方法
+            sendMessage(socket, user.ToByteArray());
+            Console.ReadKey();
         }
 
         public static void sendMessage(Socket socket, byte[] bytes)

@@ -42,9 +42,12 @@ namespace GameServer.Network
 
         private static void OnDataReceived(NetConnection shader, byte[] data)
         {
+            User user = User.Parser.ParseFrom(data);
+            //Vector3 vector = Vector3.Parser.ParseFrom(data);
             String str = Encoding.UTF8.GetString(data);
             Console.WriteLine(str);
-           
+            Console.WriteLine("收到客户端消息: " + user.Id + " " + user.Name);
+            MassageRouter.Instance.AddMessage(shader, user);
         }
 
         private static void OnDisconnected(NetConnection shader)

@@ -31,7 +31,7 @@ namespace GameServer.Network
 
             var len = new LengthFieldDecoder(socket, 64 * 1024, 0, 4, 0, 4);
             len.DataReceived += Len_DataReceived;
-            len.disconnectedHandler += (Socket soc) => OnDisconnected(this);
+            len.disconnectedHandler += (Socket soc) => OnDisconnected?.Invoke(this);
             len.Start();
         }
 
