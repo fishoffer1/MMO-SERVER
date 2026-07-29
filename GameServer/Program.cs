@@ -1,4 +1,6 @@
-﻿using GameServer.Network;
+﻿using Common.Network;
+using GameServer.Network;
+using Google.Protobuf;
 using Network;
 using System.Net;
 using System.Net.Sockets;
@@ -13,12 +15,15 @@ namespace GameServer
             NetService netService = new NetService();
             netService.Init(32510);//初始化网络服务，监听端口32510
             netService.Start();
+
+            MassageRouter.Instance.on<User>(OnMsgTest);
             Console.ReadKey();
             
         }
 
-        
-
-       
+        private static void OnMsgTest<User>(NetConnection sender, User message)
+        {
+            
+        }
     }
 }
