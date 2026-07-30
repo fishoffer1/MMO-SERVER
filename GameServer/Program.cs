@@ -16,12 +16,14 @@ namespace GameServer
             netService.Init(32510);//初始化网络服务，监听端口32510
             netService.Start();
 
-            MassageRouter.Instance.on<User>(OnMsgTest);
+            MassageRouter.Instance.Start(4);//启动消息路由器，使用4个线程处理消息
+
+            MassageRouter.Instance.on<Package>(OnMsgTest);
             Console.ReadKey();
             
         }
 
-        private static void OnMsgTest<User>(NetConnection sender, User message)
+        private static void OnMsgTest<Package>(NetConnection sender, Package message)
         {
             
         }

@@ -7,7 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="..\..\..\..\MMOrpg\protoc-21.12-win64\protoc-21.12-win64\output\csharp\Message.cs" Link="Proto\Message.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Google.Protobuf" Version="3.35.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Proto\" />
   </ItemGroup>
 
 </Project>
