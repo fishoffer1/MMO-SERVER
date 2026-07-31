@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Numerics;
 using System.Text;
+using Common.Network;
 using Google.Protobuf;
 namespace TestClient
 {
@@ -26,21 +27,24 @@ namespace TestClient
             package.Request.UserLogin.Username = "testuser";
             package.Request.UserLogin.Password = "123456";
 
-            MemoryStream stream = new MemoryStream();
-            CodedOutputStream outputStream = new CodedOutputStream(stream);
-            package.WriteTo(outputStream);
-            outputStream.Flush();
-            sendMessage(socket, package.ToByteArray());
+            NetConnection conn = new NetConnection(socket, null, null);
+            conn.Send(package);
+            //MemoryStream stream = new MemoryStream();
+            //CodedOutputStream outputStream = new CodedOutputStream(stream);
+            //package.WriteTo(outputStream);
+            //outputStream.Flush();
+            //sendMessage(socket, package.ToByteArray());
+            
             Console.ReadKey();
         }
 
-        public static void sendMessage(Socket socket, byte[] bytes)
-        {
-            int buffer = bytes.Length;
-            byte[] lenbytes = BitConverter.GetBytes(buffer);
-            socket.Send(lenbytes);
-            socket.Send(bytes);//向服务端发送数据：该数据的长度和本数据。
-            Console.WriteLine("成功发送数据：" + Encoding.UTF8.GetString(bytes));
-        }
+        //public static void sendMessage(Socket socket, byte[] bytes)
+        //{
+        //    int buffer = bytes.Length;
+        //    byte[] lenbytes = BitConverter.GetBytes(buffer);
+        //    socket.Send(lenbytes);
+        //    socket.Send(bytes);//向服务端发送数据：该数据的长度和本数据。
+        //    Console.WriteLine("成功发送数据：" + Encoding.UTF8.GetString(bytes));
+        //}
     }
 }

@@ -1,4 +1,5 @@
-﻿using Network;
+﻿using Google.Protobuf;
+using Network;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,8 +19,8 @@ namespace Common.Network
         public delegate void OnDisconnectedEventCallback(NetConnection shader);
        
         public Socket socket;
-        private DataReceivedEventCallback DataReceived;
-        private OnDisconnectedEventCallback OnDisconnected;
+        private DataReceivedEventCallback DataReceived;//数据接收完成事件
+        private OnDisconnectedEventCallback OnDisconnected;//连接断开事件
         /// <summary>
         /// 关闭连接
         /// </summary>
@@ -58,6 +59,32 @@ namespace Common.Network
             socket.Close();
             socket = null;
             OnDisconnected?.Invoke(this);
+        }
+        public void Send(Package package)
+        {
+            byte[] data = null;
+            using (MemoryStream ms = new MemoryStream())
+            {
+                package.WriteTo(ms);
+                data = new byte[4 + ms.Length];
+                Buffer.BlockCopy(BitConverter.GetBytes((int)ms.Length), 0, data, 0, 4);
+                Buffer.BlockCopy(ms.GetBuffer(), 0, data, 4, (int)ms.Length);
+            }
+            Send(data, 0, data.Length);
+
+        }
+        public void Send(byte[] data , int offset, int length)
+        {
+            if (socket.Connected)
+            {
+                socket.BeginSend(data, offset, length, SocketFlags.None, new AsyncCallback(SendCallback), socket);
+            }
+        }
+
+        private void SendCallback(IAsyncResult ar)
+        {
+            //发送的字节数
+            int bytesSent = socket.EndSend(ar);
         }
     }
 }
