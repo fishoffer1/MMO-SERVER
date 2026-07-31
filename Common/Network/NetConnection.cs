@@ -60,6 +60,46 @@ namespace Common.Network
             socket = null;
             OnDisconnected?.Invoke(this);
         }
+        #region 发送网路数据包的封装
+        private Package _package = null;
+
+        public Request Request
+        {
+            get
+            {
+                if (_package == null)
+                {
+                    _package = new Package();
+                }
+                if(_package.Request == null)
+                {
+                    _package.Request = new Request();
+                }
+                return _package.Request;
+            }
+        }
+
+        public Response Response
+        {
+            get
+            {
+                if (_package == null)
+                {
+                    _package = new Package();
+                }
+                if (_package.Response == null)
+                {
+                    _package.Response = new Response();
+                }
+                return _package.Response;
+            }
+        }
+
+        public void Send()
+        {
+            if (_package != null) Send(_package);
+            _package = null;
+        }
         public void Send(Package package)
         {
             byte[] data = null;
@@ -88,3 +128,4 @@ namespace Common.Network
         }
     }
 }
+    #endregion

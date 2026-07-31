@@ -167,6 +167,15 @@ namespace Common.Network
 
         public void doRequest(NetConnection sender, Request request)
         {
+            var fireMethod = typeof(MassageRouter).GetMethod("Fire", BindingFlags.NonPublic | BindingFlags.Instance);
+            Type t = request.GetType();
+            foreach (var p in t.GetProperties()) 
+            {
+                if ("Parser" == p.Name || "Descriptor" == p.Name) continue;
+                Console.WriteLine(p.Name);
+                var value = p.GetValue(request);
+                Console.WriteLine("====" + value);
+            }
             if (request.UserRegister != null)
             {
                 Fire(sender, request.UserRegister);
