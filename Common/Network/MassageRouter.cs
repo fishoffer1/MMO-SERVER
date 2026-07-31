@@ -1,5 +1,5 @@
 ﻿using Common;
- using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -32,9 +32,9 @@ namespace Common.Network
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="message"></param>
-        public delegate void MassageHandler<T>(NetConnection sender, Package message);
+        public delegate void MassageHandler<T>(NetConnection sender, T message);
         /// <summary>
-        /// 消息频道字典，存储消息类型和对应的处理函数
+        /// 消息频道字典，存储消息类型和对应的处理函数（订阅列表）
         /// </summary>
         private Dictionary<string, Delegate> delagateMap = new Dictionary<string, Delegate>();
 
@@ -58,6 +58,29 @@ namespace Common.Network
                 delagateMap[type] = null;
             }
             delagateMap[type] = (MassageHandler<T>)delagateMap[type] - sender;
+        }
+
+        //触发
+        void Fire<T>(NetConnection sender ,T msg)
+        {
+            string type = typeof(T).Name;
+            if (delagateMap.ContainsKey(type))//是否有订阅者
+            {
+                MassageHandler<T> handlers = (MassageHandler<T>)delagateMap[type];
+               
+                
+                    try
+                    {
+                        handlers.Invoke(sender, msg);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Message.Fire error: " + ex.StackTrace);
+                       
+                    }
+                
+            }
         }
         /// <summary>
         /// 添加消息到队列
@@ -85,8 +108,8 @@ namespace Common.Network
         public void Start(int ThreadCount)
         {
             isRunning = true;
-            this.threadCount = Math.Max(ThreadCount, 1);
-            this.threadCount = Math.Min(ThreadCount, 200);
+           
+            this.threadCount = Math.Min(Math.Max(ThreadCount, 1), 200);
             for(int i = 0; i < this.threadCount; i++)
             {
                 ThreadPool.QueueUserWorkItem(new WaitCallback(MessageWorker));
@@ -102,7 +125,7 @@ namespace Common.Network
             Console.WriteLine("消息处理线程启动");
             try
             {
-                Interlocked.Increment(ref this.threadCount);
+                Interlocked.Increment(ref this.WorkerCount);
                 //一直工作循环，直到程序退出
                 while (isRunning)
                 {
@@ -135,7 +158,7 @@ namespace Common.Network
             }
             finally
             {
-                Interlocked.Decrement(ref this.threadCount);
+                Interlocked.Decrement(ref this.WorkerCount);
             }
             
             
@@ -146,22 +169,22 @@ namespace Common.Network
         {
             if (request.UserRegister != null)
             {
-                Console.WriteLine("用户注册请求" + request.UserRegister.Username);
+                Fire(sender, request.UserRegister);
             }
             if (request.UserLogin != null)
             {
-                Console.WriteLine("用户登录请求" + request.UserLogin.Username);
+                Fire(sender, request.UserLogin);
             }
         }
         public void doResponse(NetConnection sender, Response response)
         {
             if (response.UserRegister != null)
             {
-                
+                Fire(sender, response.UserRegister);
             }
             if (response.UserLogin != null)
             {
-               
+               Fire(sender, response.UserLogin);   
             }
         }
     }

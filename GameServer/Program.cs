@@ -17,13 +17,19 @@ namespace GameServer
             netService.Start();
 
             MassageRouter.Instance.Start(4);//启动消息路由器，使用4个线程处理消息
-
+            //消息订阅
+            MassageRouter.Instance.on<UserLoginRequest>(OnUserLoginRequest);    
             MassageRouter.Instance.on<Package>(OnMsgTest);
             Console.ReadKey();
             
         }
 
-        private static void OnMsgTest<Package>(NetConnection sender, Package message)
+        private static void OnUserLoginRequest(NetConnection sender, UserLoginRequest message)
+        {
+            Console.WriteLine("发现用户登录请求：{0} {1}", message.Username, message.Password);
+        }
+
+        private static void OnMsgTest(NetConnection sender, Package message)
         {
             
         }
