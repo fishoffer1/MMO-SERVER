@@ -11,7 +11,7 @@ namespace Common.Network
     class MsgUnit
     {
         public NetConnection sender;
-        public Package message;
+        public Google.Protobuf.IMessage message;
     }
     /// <summary>
     /// 消息转发器
@@ -41,7 +41,7 @@ namespace Common.Network
         //订阅
         public void on<T>(MassageHandler<T> sender) where T : Google.Protobuf.IMessage
         {
-            string type = typeof(T).Name;
+            string type = typeof(T).FullName;
             if (!delagateMap.ContainsKey(type))
             {
                 delagateMap[type] = null;
@@ -52,7 +52,7 @@ namespace Common.Network
         //退订
         public void off<T>(MassageHandler<T> sender) where T : Google.Protobuf.IMessage
         {
-            string type = typeof(T).Name;
+            string type = typeof(T).FullName;
             if (!delagateMap.ContainsKey(type))
             {
                 delagateMap[type] = null;
@@ -63,7 +63,7 @@ namespace Common.Network
         //触发
         void Fire<T>(NetConnection sender ,T msg)
         {
-            string type = typeof(T).Name;
+            string type = typeof(T).FullName;
             if (delagateMap.ContainsKey(type))//是否有订阅者
             {
                 MassageHandler<T> handlers = (MassageHandler<T>)delagateMap[type];
@@ -137,18 +137,10 @@ namespace Common.Network
                     //MsgUnit pack = messageQueue.Dequeue();
                     // 从消息队列取出一个元素
                     MsgUnit msgUnit = messageQueue.Dequeue();
-                    Package package = msgUnit.message;
+                    Google.Protobuf.IMessage package = msgUnit.message;
                     if (package != null)
                     {
-                        if (package.Request != null)
-                        {
-                            doRequest(msgUnit.sender, package.Request);
-
-                        }
-                        if (package.Response != null)
-                        {
-                            doResponse(msgUnit.sender, package.Response);
-                        }
+                        executeMessage(msgUnit.sender, package);
                     }
                 }
             }
@@ -165,36 +157,56 @@ namespace Common.Network
             Console.WriteLine("消息处理线程退出");
         }
 
-        public void doRequest(NetConnection sender, Request request)
+        private void executeMessage(NetConnection sender , Google.Protobuf.IMessage message)
         {
             var fireMethod = typeof(MassageRouter).GetMethod("Fire", BindingFlags.NonPublic | BindingFlags.Instance);
-            Type t = request.GetType();
-            foreach (var p in t.GetProperties()) 
+            var t = message.GetType();
+            foreach (var p in t.GetProperties())
             {
+                //递归过程中，只要发消息，就能触发订阅
                 if ("Parser" == p.Name || "Descriptor" == p.Name) continue;
-                Console.WriteLine(p.Name);
-                var value = p.GetValue(request);
-                Console.WriteLine("====" + value);
-            }
-            if (request.UserRegister != null)
-            {
-                Fire(sender, request.UserRegister);
-            }
-            if (request.UserLogin != null)
-            {
-                Fire(sender, request.UserLogin);
-            }
-        }
-        public void doResponse(NetConnection sender, Response response)
-        {
-            if (response.UserRegister != null)
-            {
-                Fire(sender, response.UserRegister);
-            }
-            if (response.UserLogin != null)
-            {
-               Fire(sender, response.UserLogin);   
+                var value = p.GetValue(message);
+                if (value != null)
+                {
+                    if (value.GetType().IsAssignableTo(typeof(Google.Protobuf.IMessage)))
+                    {
+                        Console.WriteLine("发现消息，触发订阅，继续递归");
+                        //触发订阅
+                        var genericMethod = fireMethod.MakeGenericMethod(value.GetType());
+                        genericMethod.Invoke(this, new object[] { sender, value });
+                        //继续递归
+                        executeMessage(sender, (Google.Protobuf.IMessage)value);
+                    }
+
+                }
             }
         }
+        ///// <summary>
+        ///// 执行消息处理，反射获取消息类型并触发对应的处理函数
+        ///// </summary>
+        ///// <param name="sender"></param>
+        ///// <param name="entity"></param>
+        //public void execute(NetConnection sender, object entity)
+        //{
+        //    var fireMethod = typeof(MassageRouter).GetMethod("Fire", BindingFlags.NonPublic | BindingFlags.Instance);
+        //    Type t = entity.GetType();
+        //    foreach (var p in t.GetProperties()) 
+        //    {
+        //        if ("Parser" == p.Name || "Descriptor" == p.Name) continue;
+        //        Console.WriteLine(p.Name);
+        //        var value = p.GetValue(entity);//value.GetType == p.PropertyType
+        //        Console.WriteLine("====" + value);
+        //        if(value != null)
+        //        {
+                    
+        //            var genericMethod = fireMethod.MakeGenericMethod(value.GetType());
+        //            genericMethod.Invoke(this, new object[] { sender, value });
+                    
+                    
+        //        }
+        //    }
+            
+        //}
+       
     }
 }

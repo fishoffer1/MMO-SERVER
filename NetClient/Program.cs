@@ -19,25 +19,22 @@ namespace TestClient
             socket.Connect(ipEndPoint);
             Console.WriteLine("Connected to server.");
 
+            Thread.Sleep(1000);
 
             NetConnection conn = new NetConnection(socket, null, null);
             //构建发送
-            Package package = new Package();
-            package.Request = new Request();
-            package.Request.UserLogin = new UserLoginRequest();
-            package.Request.UserLogin.Username = "testuser";
-            package.Request.UserLogin.Password = "123456";
-            conn.Send(package);
+            //Package package = new Package();
+            //package.Request = new Request();
+            //package.Request.UserLogin = new UserLoginRequest();
+            //package.Request.UserLogin.Username = "testuser";
+            //package.Request.UserLogin.Password = "123456";
+            //conn.Send(package);
             //快捷发送
             conn.Request.UserLogin = new UserLoginRequest();
             conn.Request.UserLogin.Username = "hero";
             conn.Request.UserLogin.Password = "666666";
             conn.Send();
-            //MemoryStream stream = new MemoryStream();
-            //CodedOutputStream outputStream = new CodedOutputStream(stream);
-            //package.WriteTo(outputStream);
-            //outputStream.Flush();
-            //sendMessage(socket, package.ToByteArray());
+            
 
             Console.ReadKey();
         }
