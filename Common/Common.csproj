@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <Compile Include="..\..\..\..\MMOrpg\protoc-21.12-win64\protoc-21.12-win64\output\csharp\Message.cs" Link="Proto\Message.cs" />
+    <Compile Include="..\..\..\..\MMOrpg\课程资料（新版2）\代码参考\Vector3\Vector3Int.cs" Link="Vector3Int.cs" />
   </ItemGroup>
 
   <ItemGroup>

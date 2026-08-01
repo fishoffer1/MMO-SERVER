@@ -173,7 +173,7 @@ namespace Summer
                 var value = p.GetValue(message);
                 if (value != null)
                 {
-                    if (value.GetType().IsAssignableTo(typeof(Google.Protobuf.IMessage)))
+                    if(typeof(Google.Protobuf.IMessage).IsAssignableFrom(value.GetType()))
                     {
                         Console.WriteLine("发现消息，触发订阅，继续递归");
 
