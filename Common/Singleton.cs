@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Common
+namespace Summer
 {//单列，全局唯一。
  //where T : new() 约束T必须有一个无参数的构造函数 
     public class Singleton<T> where T : new()

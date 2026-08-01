@@ -1,5 +1,5 @@
 ﻿using Google.Protobuf;
-using Network;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,8 +7,8 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Common.Network
-{
+namespace Summer
+{ 
     /// <summary>
     /// 客户端网络连接
     /// 职责：发送消息，接收消息，关闭连接，断开通知。

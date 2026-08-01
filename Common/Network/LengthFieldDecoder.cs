@@ -5,7 +5,8 @@ using System.Text;
 //var len = new LengthFieldDecoder(Socket ,64*1024, 0, 4, 0, 4);
 //len.DataReceived += Len_DataReceived;
 //len.Start();
-namespace Network
+namespace Summer
+
 {
     /// <summary>
     /// 这是Socket异步接收器，可以对接收的数据粘包与拆包

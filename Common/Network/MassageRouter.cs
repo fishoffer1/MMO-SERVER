@@ -1,12 +1,13 @@
-﻿using Common;
+﻿using Summer;
+using Google.Protobuf;
+using Google.Protobuf.WellKnownTypes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using Google.Protobuf;
-namespace Common.Network
+namespace Summer
 {
     class MsgUnit
     {
@@ -61,25 +62,25 @@ namespace Common.Network
         }
 
         //触发
-        void Fire<T>(NetConnection sender ,T msg)
+        void Fire<T>(NetConnection sender, T msg)
         {
             string type = typeof(T).FullName;
             if (delagateMap.ContainsKey(type))//是否有订阅者
             {
                 MassageHandler<T> handlers = (MassageHandler<T>)delagateMap[type];
-               
-                
-                    try
-                    {
-                        handlers.Invoke(sender, msg);
 
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine("Message.Fire error: " + ex.StackTrace);
-                       
-                    }
-                
+
+                try
+                {
+                    handlers.Invoke(sender, msg);
+
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Message.Fire error: " + ex.StackTrace);
+
+                }
+
             }
         }
         /// <summary>
@@ -93,7 +94,7 @@ namespace Common.Network
             messageQueue.Enqueue(new MsgUnit { sender = sender, message = message });
             threadEvent.Set();//唤醒线程处理消息
         }
-    
+
         public void Stop()
         {
             isRunning = false;
@@ -108,13 +109,13 @@ namespace Common.Network
         public void Start(int ThreadCount)
         {
             isRunning = true;
-           
+
             this.threadCount = Math.Min(Math.Max(ThreadCount, 1), 200);
-            for(int i = 0; i < this.threadCount; i++)
+            for (int i = 0; i < this.threadCount; i++)
             {
                 ThreadPool.QueueUserWorkItem(new WaitCallback(MessageWorker));
             }
-            while (WorkerCount< this.threadCount)
+            while (WorkerCount < this.threadCount)
             {
                 Thread.Sleep(100);
             }
@@ -152,18 +153,22 @@ namespace Common.Network
             {
                 Interlocked.Decrement(ref this.WorkerCount);
             }
-            
-            
+
+
             Console.WriteLine("消息处理线程退出");
         }
 
-        private void executeMessage(NetConnection sender , Google.Protobuf.IMessage message)
+        private void executeMessage(NetConnection sender, Google.Protobuf.IMessage message)
         {
+            //发现消息就触发订阅
+
             var fireMethod = typeof(MassageRouter).GetMethod("Fire", BindingFlags.NonPublic | BindingFlags.Instance);
             var t = message.GetType();
+            var genericMethod = fireMethod.MakeGenericMethod(message.GetType());
+            genericMethod.Invoke(this, new object[] { sender, message });
             foreach (var p in t.GetProperties())
             {
-                //递归过程中，只要发消息，就能触发订阅
+
                 if ("Parser" == p.Name || "Descriptor" == p.Name) continue;
                 var value = p.GetValue(message);
                 if (value != null)
@@ -171,9 +176,7 @@ namespace Common.Network
                     if (value.GetType().IsAssignableTo(typeof(Google.Protobuf.IMessage)))
                     {
                         Console.WriteLine("发现消息，触发订阅，继续递归");
-                        //触发订阅
-                        var genericMethod = fireMethod.MakeGenericMethod(value.GetType());
-                        genericMethod.Invoke(this, new object[] { sender, value });
+
                         //继续递归
                         executeMessage(sender, (Google.Protobuf.IMessage)value);
                     }
@@ -198,15 +201,15 @@ namespace Common.Network
         //        Console.WriteLine("====" + value);
         //        if(value != null)
         //        {
-                    
+
         //            var genericMethod = fireMethod.MakeGenericMethod(value.GetType());
         //            genericMethod.Invoke(this, new object[] { sender, value });
-                    
-                    
+
+
         //        }
         //    }
-            
+
         //}
-       
+
     }
 }
