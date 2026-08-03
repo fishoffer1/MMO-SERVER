@@ -31,15 +31,11 @@ namespace Summer
 
             var len = new LengthFieldDecoder(socket, 64 * 1024, 0, 4, 0, 4);
             len.DataReceived += Len_DataReceived;
-            len.disconnectedHandler += (Socket soc) => OnDisconnected?.Invoke(this);
+            len.Disconnected += (Socket soc) => OnDisconnected?.Invoke(this);
             len.Start();
         }
 
-        private void Ondisconnected(Socket soc)
-        {
-            OnDisconnected(this);
-        }
-
+        
         private void Len_DataReceived(byte[] buffer)
         {
             OnDataReceived?.Invoke(this, buffer);
