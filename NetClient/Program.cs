@@ -3,7 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Numerics;
 using System.Text;
-
+using Common.Proto;
 using Google.Protobuf;
 using Summer;
 namespace TestClient
@@ -22,7 +22,7 @@ namespace TestClient
 
             Thread.Sleep(1000);
 
-            NetConnection conn = new NetConnection(socket, null, null);
+            MyConnection conn = new MyConnection(socket);
             //构建发送
             //Package package = new Package();
             //package.Request = new Request();

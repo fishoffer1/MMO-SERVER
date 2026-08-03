@@ -36,13 +36,13 @@ namespace GameServer.Network
             var ipe = Socket.RemoteEndPoint as IPEndPoint;//向下转型,类型还原；
             Console.WriteLine("有客户连接" + ipe.Address);
             //当有客户端连入时触发
-            new NetConnection(Socket,
-                new NetConnection.DataReceivedEventCallback(OnDataReceived), 
-                new NetConnection.OnDisconnectedEventCallback(OnDisconnected));
-            
+            var conn =new Connection(Socket);
+            conn.OnDataReceived += OnDataReceived;
+            conn.OnDisconnected += OnDisconnected;
+
         }
 
-        private static void OnDataReceived(NetConnection shader, byte[] data)
+        private static void OnDataReceived(Connection shader, byte[] data)
         {
             Package package = Package.Parser.ParseFrom(data);
             //Vector3 vector = Vector3.Parser.ParseFrom(data);
@@ -52,7 +52,7 @@ namespace GameServer.Network
             MassageRouter.Instance.AddMessage(shader, package);
         }
 
-        private static void OnDisconnected(NetConnection shader)
+        private static void OnDisconnected(Connection shader)
         {
             Console.WriteLine("客户端断开连接");
         }

@@ -10,25 +10,24 @@ using System.Threading.Tasks;
 namespace Summer
 { 
     /// <summary>
-    /// 客户端网络连接
+    /// 通用网络连接,可以继承此类实现功能拓展
     /// 职责：发送消息，接收消息，关闭连接，断开通知。
     /// </summary>
-    public class NetConnection
+    public class Connection
     {
-        public delegate void DataReceivedEventCallback(NetConnection shader, byte[] data);
-        public delegate void OnDisconnectedEventCallback(NetConnection shader);
+        public delegate void DataReceivedEventCallback(Connection shader, byte[] data);
+        public delegate void OnDisconnectedEventCallback(Connection shader);
        
         public Socket socket;
-        private DataReceivedEventCallback DataReceived;//数据接收完成事件
-        private OnDisconnectedEventCallback OnDisconnected;//连接断开事件
+        public DataReceivedEventCallback OnDataReceived;//数据接收完成事件
+        public OnDisconnectedEventCallback OnDisconnected;//连接断开事件
         /// <summary>
         /// 关闭连接
         /// </summary>
-        public NetConnection(Socket socket , DataReceivedEventCallback cb1, OnDisconnectedEventCallback cb2)
+        public Connection(Socket socket)
         {
             this.socket = socket;
-            this.DataReceived = cb1;
-            this.OnDisconnected = cb2;
+            
 
             var len = new LengthFieldDecoder(socket, 64 * 1024, 0, 4, 0, 4);
             len.DataReceived += Len_DataReceived;
@@ -43,7 +42,7 @@ namespace Summer
 
         private void Len_DataReceived(byte[] buffer)
         {
-            DataReceived?.Invoke(this, buffer);
+            OnDataReceived?.Invoke(this, buffer);
         }
         public void Close()
         {
@@ -61,51 +60,14 @@ namespace Summer
             OnDisconnected?.Invoke(this);
         }
         #region 发送网路数据包的封装
-        private Package _package = null;
-
-        public Request Request
-        {
-            get
-            {
-                if (_package == null)
-                {
-                    _package = new Package();
-                }
-                if(_package.Request == null)
-                {
-                    _package.Request = new Request();
-                }
-                return _package.Request;
-            }
-        }
-
-        public Response Response
-        {
-            get
-            {
-                if (_package == null)
-                {
-                    _package = new Package();
-                }
-                if (_package.Response == null)
-                {
-                    _package.Response = new Response();
-                }
-                return _package.Response;
-            }
-        }
-
-        public void Send()
-        {
-            if (_package != null) Send(_package);
-            _package = null;
-        }
-        public void Send(Package package)
+        
+        
+        public void Send(Google.Protobuf.IMessage message)
         {
             byte[] data = null;
             using (MemoryStream ms = new MemoryStream())
             {
-                package.WriteTo(ms);
+                message.WriteTo(ms);
                 data = new byte[4 + ms.Length];
                 Buffer.BlockCopy(BitConverter.GetBytes((int)ms.Length), 0, data, 0, 4);
                 Buffer.BlockCopy(ms.GetBuffer(), 0, data, 4, (int)ms.Length);

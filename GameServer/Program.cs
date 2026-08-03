@@ -24,12 +24,12 @@ namespace GameServer
             
         }
 
-        private static void OnUserLoginRequest(NetConnection sender, UserLoginRequest message)
+        private static void OnUserLoginRequest(Connection sender, UserLoginRequest message)
         {
             Console.WriteLine("发现用户登录请求：{0} {1}", message.Username, message.Password);
         }
 
-        private static void OnMsgTest(NetConnection sender, Package message)
+        private static void OnMsgTest(Connection sender, Package message)
         {
             
         }

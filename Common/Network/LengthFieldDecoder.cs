@@ -42,7 +42,7 @@ namespace Summer
 
         //连接失败的委托事件
         public delegate void OnDisconnectedEventHandler(Socket soc);
-        public event OnDisconnectedEventHandler disconnectedHandler;
+        public event OnDisconnectedEventHandler Disconnected; 
 
 
         public LengthFieldDecoder(Socket socket, int lengthFieldOffset, int lengthFieldLength)
@@ -166,7 +166,7 @@ namespace Summer
 
         private void _disconnected()
         {
-            disconnectedHandler?.Invoke(mSocket);
+            Disconnected?.Invoke(mSocket);
         }
     }
 }

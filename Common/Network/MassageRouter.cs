@@ -11,7 +11,7 @@ namespace Summer
 {
     class MsgUnit
     {
-        public NetConnection sender;
+        public Connection sender;
         public Google.Protobuf.IMessage message;
     }
     /// <summary>
@@ -33,7 +33,7 @@ namespace Summer
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="message"></param>
-        public delegate void MassageHandler<T>(NetConnection sender, T message);
+        public delegate void MassageHandler<T>(Connection sender, T message);
         /// <summary>
         /// 消息频道字典，存储消息类型和对应的处理函数（订阅列表）
         /// </summary>
@@ -62,7 +62,7 @@ namespace Summer
         }
 
         //触发
-        void Fire<T>(NetConnection sender, T msg)
+        void Fire<T>(Connection sender, T msg)
         {
             string type = typeof(T).FullName;
             if (delagateMap.ContainsKey(type))//是否有订阅者
@@ -88,7 +88,7 @@ namespace Summer
         /// </summary>
         /// <param name="sender">消息发送者</param>
         /// <param name="message">消息内容</param>
-        public void AddMessage(NetConnection sender, Package message)
+        public void AddMessage(Connection sender, Package message)
         {
 
             messageQueue.Enqueue(new MsgUnit { sender = sender, message = message });
@@ -158,7 +158,7 @@ namespace Summer
             Console.WriteLine("消息处理线程退出");
         }
 
-        private void executeMessage(NetConnection sender, Google.Protobuf.IMessage message)
+        private void executeMessage(Connection sender, Google.Protobuf.IMessage message)
         {
             //发现消息就触发订阅
 
@@ -189,7 +189,7 @@ namespace Summer
         ///// </summary>
         ///// <param name="sender"></param>
         ///// <param name="entity"></param>
-        //public void execute(NetConnection sender, object entity)
+        //public void execute(Connection sender, object entity)
         //{
         //    var fireMethod = typeof(MassageRouter).GetMethod("Fire", BindingFlags.NonPublic | BindingFlags.Instance);
         //    Type t = entity.GetType();
