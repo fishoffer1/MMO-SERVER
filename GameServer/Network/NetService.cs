@@ -47,7 +47,7 @@ namespace GameServer.Network
             Package package = Package.Parser.ParseFrom(data);
             //Vector3 vector = Vector3.Parser.ParseFrom(data);
             String str = Encoding.UTF8.GetString(data);
-            Console.WriteLine(str);
+            //Console.WriteLine(str);
             //Console.WriteLine("收到客户端消息: " + package.Id + " " + package.Name);
             MassageRouter.Instance.AddMessage(shader, package);
         }

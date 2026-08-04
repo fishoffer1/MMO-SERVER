@@ -91,8 +91,10 @@ namespace Summer
         /// <param name="message">消息内容</param>
         public void AddMessage(Connection sender, Package message)
         {
-
-            messageQueue.Enqueue(new MsgUnit { sender = sender, message = message });
+            lock(messageQueue)
+            {
+                messageQueue.Enqueue(new MsgUnit { sender = sender, message = message });
+            }   
             threadEvent.Set();//唤醒线程处理消息
         }
 
@@ -138,7 +140,17 @@ namespace Summer
                     }
                     //MsgUnit pack = messageQueue.Dequeue();
                     // 从消息队列取出一个元素
-                    MsgUnit msgUnit = messageQueue.Dequeue();
+                    MsgUnit msgUnit = null;
+
+                    lock (messageQueue) {
+                        if (messageQueue.Count == 0)
+                        { 
+                            continue;
+                        }
+                        msgUnit = messageQueue.Dequeue();
+                    }
+
+                   
                     Google.Protobuf.IMessage package = msgUnit.message;
                     if (package != null)
                     {
@@ -176,7 +188,7 @@ namespace Summer
                 {
                     if(typeof(Google.Protobuf.IMessage).IsAssignableFrom(value.GetType()))
                     {
-                        Console.WriteLine("发现消息，触发订阅，继续递归");
+                        //Console.WriteLine("发现消息，触发订阅，继续递归");
 
                         //继续递归
                         executeMessage(sender, (Google.Protobuf.IMessage)value);

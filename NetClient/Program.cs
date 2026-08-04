@@ -31,10 +31,13 @@ namespace TestClient
             //package.Request.UserLogin.Password = "123456";
             //conn.Send(package);
             //快捷发送
-            conn.Request.UserLogin = new UserLoginRequest();
-            conn.Request.UserLogin.Username = "hero";
-            conn.Request.UserLogin.Password = "666666";
-            conn.Send();
+            //for (int i = 0; i < 400000; i++)
+            //{
+            //    conn.Request.UserLogin = new UserLoginRequest();
+            //    conn.Request.UserLogin.Username = "hero" + i;
+            //    conn.Request.UserLogin.Password = "qwb"+i;
+            //    conn.Send();
+            //}
             
 
             Console.ReadKey();
