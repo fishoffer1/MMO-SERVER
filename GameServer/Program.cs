@@ -13,11 +13,9 @@ namespace GameServer
         static void Main(string[] args)
         {
             NetService netService = new NetService();
-            netService.Init(32510);//初始化网络服务，监听端口32510
+            
             netService.Start();
-            MassageRouter.Instance.Start(8);
-            //启动消息路由器，使用4个线程处理消息
-            //消息订阅
+
             MassageRouter.Instance.on<UserLoginRequest>(OnUserLoginRequest);    
                 
             while(true){

@@ -77,7 +77,7 @@ namespace Summer.Network
                  //连入的人
                 if (client!=null)
                 {
-                    
+                    OnSocketConnected(client);
                 }
                 
             }

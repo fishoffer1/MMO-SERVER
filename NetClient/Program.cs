@@ -62,17 +62,7 @@ namespace TestClient
 
             Console.ReadKey();
         }
-       
 
-
-        //public static void sendMessage(Socket socket, byte[] bytes)
-        //{
-        //    int buffer = bytes.Length;
-        //    byte[] lenbytes = BitConverter.GetBytes(buffer);
-        //    socket.Send(lenbytes);
-        //    socket.Send(bytes);//向服务端发送数据：该数据的长度和本数据。
-        //    Console.WriteLine("成功发送数据：" + Encoding.UTF8.GetString(bytes));
-        //}
 
     }
 }

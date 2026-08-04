@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Google.Protobuf;
 using Summer;
+using Summer.Network;
 
 namespace GameServer.Network
 {/// <summary>
@@ -15,44 +16,41 @@ namespace GameServer.Network
  /// <summary>
     public class NetService
     {
-        //网络监听器
-        TcpSocketListener listener = null;
-        public void Init(int port)
-        {
-            Console.WriteLine("Hello, World!");
-            listener = new TcpSocketListener("0.0.0.0", port);
-            listener.SocketConnected += OnClientCoenneted;
-            
-           // Console.ReadKey();
-            // Initialization code for the network service
-        }
+        TcpServer TcpServer;
 
+        public NetService()
+        {
+            TcpServer = new TcpServer("0.0.0.0", 32510);
+            TcpServer.Connected += OnClientCoenneted;
+            TcpServer.DataReceived += OnDataReceived;
+            TcpServer.Disconnected += OnDisconnected;
+        }
         public void Start()
         {
-            listener.Start();
+            //启动网络监听
+            TcpServer.Start();
+            //启动消息分发器
+            MassageRouter.Instance.Start(10);
         }
-         static void OnClientCoenneted(object? sender, Socket Socket)
+
+
+
+        static void OnClientCoenneted(Connection conn)
         {
-            var ipe = Socket.RemoteEndPoint as IPEndPoint;//向下转型,类型还原；
-            Console.WriteLine("有客户连接" + ipe.Address);
             //当有客户端连入时触发
-            var conn =new Connection(Socket);
-            conn.OnDataReceived += OnDataReceived;
-            conn.OnDisconnected += OnDisconnected;
-
+            Console.WriteLine("有客户连接" );
+      
         }
 
-        private static void OnDataReceived(Connection shader, byte[] data)
+        private static void OnDataReceived(Connection conn, byte[] data)
         {
+            //Console.WriteLine("收到客户端数据，长度：" + data.Length);
             Package package = Package.Parser.ParseFrom(data);
-            //Vector3 vector = Vector3.Parser.ParseFrom(data);
-            String str = Encoding.UTF8.GetString(data);
-            //Console.WriteLine(str);
-            //Console.WriteLine("收到客户端消息: " + package.Id + " " + package.Name);
-            MassageRouter.Instance.AddMessage(shader, package);
+           
+            MassageRouter.Instance.AddMessage(conn, package);
         }
 
-        private static void OnDisconnected(Connection shader)
+        private static void OnDisconnected(Connection conn)
         {
             Console.WriteLine("客户端断开连接");
         }

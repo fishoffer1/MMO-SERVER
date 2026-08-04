@@ -111,6 +111,7 @@ namespace Summer
 
         public void Start(int ThreadCount)
         {
+            if (isRunning) return;
             isRunning = true;
 
             this.threadCount = Math.Min(Math.Max(ThreadCount, 1), 200);
