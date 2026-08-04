@@ -6,7 +6,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Common.Proto
+namespace Common.Package
 {
     public class MyConnection : Connection
     {
@@ -14,7 +14,7 @@ namespace Common.Proto
         {
 
         }
-        private Package _package = null;
+        private global::Package _package = null;
 
         public Request Request
         {
@@ -22,7 +22,7 @@ namespace Common.Proto
             {
                 if (_package == null)
                 {
-                    _package = new Package();
+                    _package = new global::Package();
                 }
                 if (_package.Request == null)
                 {
@@ -38,7 +38,7 @@ namespace Common.Proto
             {
                 if (_package == null)
                 {
-                    _package = new Package();
+                    _package = new global::Package();
                 }
                 if (_package.Response == null)
                 {

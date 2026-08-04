@@ -18,7 +18,8 @@ namespace Summer
         public delegate void DataReceivedEventCallback(Connection shader, byte[] data);
         public delegate void OnDisconnectedEventCallback(Connection shader);
        
-        public Socket socket;
+        private Socket socket;
+        public Socket Socket { get { return socket; } }
         public DataReceivedEventCallback OnDataReceived;//数据接收完成事件
         public OnDisconnectedEventCallback OnDisconnected;//连接断开事件
         /// <summary>
