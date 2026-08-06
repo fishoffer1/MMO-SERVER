@@ -3,8 +3,12 @@ using System.Net;
 using System.Net.Sockets;
 using System.Numerics;
 using System.Text;
-using Common.Package;
+using Common;
+
+using Common.Proto;
 using Google.Protobuf;
+using Proto;
+using Serilog;
 using Summer;
 namespace TestClient
 {
@@ -12,53 +16,38 @@ namespace TestClient
     {
         static void Main(string[] args)
         {
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Debug() // 设置日志的最小级别为 Debug
+                .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {SourceContext} - {Message:lj}{NewLine}{Exception}")
+                .WriteTo.File("logs/Client-log-.txt", rollingInterval: RollingInterval.Day, outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {SourceContext} - {Message:lj}{NewLine}{Exception}")
+                .CreateLogger();
+
             var address = IPAddress.Parse("127.0.0.1");
             int port = 32510;
-            Console.WriteLine("Hello, World!");
+            Log.Debug("Hello, World!");
             IPEndPoint ipEndPoint = new(address, port);
             Socket socket = new(System.Net.Sockets.AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             socket.Connect(ipEndPoint);
-            Console.WriteLine("Connected to server.");
+
+            Log.Information ("Connected to server.");
+           
 
             Thread.Sleep(1000);
 
-            MyConnection conn = new MyConnection(socket);
-            //构建发送
-            //Package package = new Package();
-            //package.Request = new Request();
-            //package.Request.UserLogin = new UserLoginRequest();
-            //package.Request.UserLogin.Username = "testuser";
-            //package.Request.UserLogin.Password = "123456";
-            //conn.Send(package);
-            //快捷发送
-            void SendRequest(Google.Protobuf.IMessage message)
-            {
-                
-                var package = new Package() { Request = new Request() };
+            Connection conn = new Connection(socket);
+            
+           
 
-                foreach (var p in package.Request.GetType().GetProperties())
-                {
-                    if (p.PropertyType == message.GetType())
-                    {
-                        
-                        p.SetValue(package.Request, message);
-
-                    }
-
-                }
-                conn.Send(package);
-            }
-
-            conn.Request.UserLogin = new UserLoginRequest();
-            conn.Request.UserLogin.Username = "hero";
-            conn.Request.UserLogin.Password = "qwb";
-            conn.Send();
+            
 
             var message = new UserLoginRequest();
             message.Username = "testuserqwb";
             message.Password = "123456";
-            SendRequest(message);
+            conn.Send(message);
 
+            //var pack = ProtoHelper.Pack(message);
+            //var res = ProtoHelper.Unpack(pack);
+            //Log.Information("{0}：{1}", res.GetType(), res);
 
             Console.ReadKey();
         }

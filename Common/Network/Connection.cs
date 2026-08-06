@@ -1,5 +1,7 @@
-﻿using Google.Protobuf;
-
+﻿using Common;
+using Google.Protobuf;
+using Proto;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +17,7 @@ namespace Summer
     /// </summary>
     public class Connection
     {
-        public delegate void DataReceivedEventCallback(Connection shader, byte[] data);
+        public delegate void DataReceivedEventCallback(Connection shader, IMessage data);
         public delegate void OnDisconnectedEventCallback(Connection shader);
        
         private Socket socket;
@@ -39,7 +41,9 @@ namespace Summer
         
         private void Len_DataReceived(byte[] buffer)
         {
-            OnDataReceived?.Invoke(this, buffer);
+            Package package = Package.Parser.ParseFrom(buffer);
+            var message = ProtoHelper.Unpack(package);
+            OnDataReceived?.Invoke(this, message);
         }
         public void Close()
         {
@@ -49,7 +53,7 @@ namespace Summer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("关闭连接异常：" + ex.Message);
+                Log.Error("关闭连接异常：" + ex.Message);
             }
 
             socket.Close();
@@ -61,12 +65,19 @@ namespace Summer
         
         public void Send(Google.Protobuf.IMessage message)
         {
+            Package pack = ProtoHelper.Pack(message);
+
             byte[] data = null;
             using (MemoryStream ms = new MemoryStream())
             {
-                message.WriteTo(ms);
+                pack.WriteTo(ms);
+                //对消息进行编码
                 data = new byte[4 + ms.Length];
-                Buffer.BlockCopy(BitConverter.GetBytes((int)ms.Length), 0, data, 0, 4);
+                byte[] lenBytes = BitConverter.GetBytes((int)ms.Length);
+                //如果是小端字节序，则需要反转字节数组  
+                if (BitConverter.IsLittleEndian) Array.Reverse(lenBytes);
+                //拼装数据结果
+                Buffer.BlockCopy(lenBytes, 0, data, 0, 4);
                 Buffer.BlockCopy(ms.GetBuffer(), 0, data, 4, (int)ms.Length);
             }
             Send(data, 0, data.Length);

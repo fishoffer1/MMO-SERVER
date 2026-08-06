@@ -24,7 +24,7 @@ namespace Summer.Network
         private int backlog = 100; //最大排队连接数
 
         public delegate void ConnectedCallback(Connection conn);
-        public delegate void DataReceivedCallback(Connection conn, byte[] data);
+        public delegate void DataReceivedCallback(Connection conn, Google.Protobuf.IMessage data);
         public delegate void DisconnectedCallback(Connection conn);
 
         //客户端接入事件

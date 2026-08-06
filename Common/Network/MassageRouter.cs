@@ -8,6 +8,9 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
+using Common;
+using Serilog;
+using Proto;
 namespace Summer
 {
     class MsgUnit
@@ -78,7 +81,7 @@ namespace Summer
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("Message.Fire error: " + ex.StackTrace);
+                    Log.Error("Message.Fire error: " + ex.StackTrace);
 
                 }
 
@@ -89,7 +92,7 @@ namespace Summer
         /// </summary>
         /// <param name="sender">消息发送者</param>
         /// <param name="message">消息内容</param>
-        public void AddMessage(Connection sender, Package message)
+        public void AddMessage(Connection sender, Google.Protobuf.IMessage message)
         {
             lock(messageQueue)
             {
@@ -127,7 +130,7 @@ namespace Summer
 
         private void MessageWorker(object? state)
         {
-            Console.WriteLine("消息处理线程启动");
+            Log.Information("消息处理线程启动");
             try
             {
                 Interlocked.Increment(ref this.WorkerCount);
@@ -169,7 +172,7 @@ namespace Summer
             }
 
 
-            Console.WriteLine("消息处理线程退出");
+            Log.Information("消息处理线程退出");
         }
 
         private void executeMessage(Connection sender, Google.Protobuf.IMessage message)

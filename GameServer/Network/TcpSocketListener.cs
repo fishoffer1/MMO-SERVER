@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Common;
+using Serilog;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -30,7 +32,7 @@ namespace GameServer.Network
                 serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 serverSocket.Bind(endPoint);
                 serverSocket.Listen();
-                Console.WriteLine("开始监听端口：" + endPoint.Port);
+                Log.Information("开始监听端口：" + endPoint.Port);
 
                 SocketAsyncEventArgs args = new SocketAsyncEventArgs();
                 args.Completed += OnAccept; //当有人连入的时候

@@ -124,7 +124,8 @@ namespace Summer
                     }
 
                     //获取包长度
-                    int bodyLen = BitConverter.ToInt32(mBuffer, mOffect + lengthFieldOffset);
+                    //int bodyLen = BitConverter.ToInt32(mBuffer, mOffect + lengthFieldOffset);
+                    int bodyLen = GetInt32BE(mBuffer, mOffect + lengthFieldOffset);
                     if (remain < headLen + adj + bodyLen)
                     {
                         //接收的数据不够一个完整的包，继续接收
@@ -133,6 +134,7 @@ namespace Summer
                         BeginAsyncReceive();
                         return;
                     }
+
 
                     //body的读取位置
                     int bodyStart = mOffect + Math.Max(headLen, headLen + adj);
@@ -163,6 +165,34 @@ namespace Summer
             }
             
         }
+
+        private int GetBodyLength(byte[] buffer, int offset)
+        {
+            int bodyLen = 0;
+            switch (lengthFieldLength)
+            {
+                case 1:
+                    bodyLen = buffer[offset];
+                    break;
+                case 2:
+                    bodyLen = BitConverter.ToInt16(buffer, offset);
+                    break;
+                case 4:
+                    bodyLen = BitConverter.ToInt32(buffer, offset);
+                    break;
+                case 8:
+                    bodyLen = (int)BitConverter.ToInt64(buffer, offset);
+                    break;
+                default:
+                    throw new Exception("不支持的长度字段长度");
+            }
+            return bodyLen;
+        }
+        private int GetInt32BE(byte[] data, int index)
+        {
+            return ((data[index] << 0x18) | (data[index + 1] << 0x10) | (data[index + 2] << 8) | data[index + 3]); 
+        }
+        
 
         private void _disconnected()
         {

@@ -6,7 +6,10 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using Common;
 using Google.Protobuf;
+using Proto;
+using Serilog;
 using Summer;
 using Summer.Network;
 
@@ -38,21 +41,18 @@ namespace GameServer.Network
         static void OnClientCoenneted(Connection conn)
         {
             //当有客户端连入时触发
-            Console.WriteLine("有客户连接" );
+            Log.Information("有客户连接" );
       
         }
 
-        private static void OnDataReceived(Connection conn, byte[] data)
+        private static void OnDataReceived(Connection conn, Google.Protobuf.IMessage data)
         {
-            //Console.WriteLine("收到客户端数据，长度：" + data.Length);
-            Package package = Package.Parser.ParseFrom(data);
-           
-            MassageRouter.Instance.AddMessage(conn, package);
+            MassageRouter.Instance.AddMessage(conn, data);
         }
 
         private static void OnDisconnected(Connection conn)
         {
-            Console.WriteLine("客户端断开连接");
+            Log.Information("客户端断开连接");
         }
 
         
