@@ -1,7 +1,5 @@
 <Solution>
   <Project Path="Common/Common.csproj" />
   <Project Path="GameServer/GameServer.csproj" />
-  <Project Path="NetClient/NetClient.csproj" Id="88a431cb-8374-4ed9-8ec9-815cd22c1dee">
-    <BuildDependency Project="Common/Common.csproj" />
-  </Project>
+  <Project Path="NetClient/NetClient.csproj" />
 </Solution>

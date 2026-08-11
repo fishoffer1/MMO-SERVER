@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\..\..\MMOrpg\protoc-21.12-win64\protoc-21.12-win64\output\csharp\Ibase.cs" Link="Proto\Ibase.cs" />
+    <Compile Include="..\..\..\..\MMOrpg\protoc-21.12-win64\protoc-21.12-win64\output\csharp\Message.cs" Link="Proto\Message.cs" />
+    <Compile Include="..\..\..\..\MMOrpg\课程资料（新版2）\代码参考\DataSerializer.cs" Link="DataSerializer.cs" />
+    <Compile Include="..\..\..\..\MMOrpg\课程资料（新版2）\代码参考\Vector3\Vector3Int.cs" Link="Vector3Int.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Google.Protobuf" Version="3.35.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets" Version="2.3.11" />
+    <PackageReference Include="Serilog" Version="4.4.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="6.1.1" />
+    <PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
+  </ItemGroup>
+
+</Project>

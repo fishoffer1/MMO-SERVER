@@ -1,13 +1,14 @@
 ﻿
-using Common;
-using Common.Proto;
 using GameServer.Network;
-using Google.Protobuf;
-using Serilog;
-using Summer;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using Summer.Network;
+
+using Common;
+using Serilog;
+using Common.Proto;
+using GameServer.Service;
 
 namespace GameServer
 {
@@ -15,28 +16,40 @@ namespace GameServer
     {
         static void Main(string[] args)
         {
+            //初始化日志环境
             Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Debug() // 设置日志的最小级别为 Debug
-                .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {SourceContext} - {Message:lj}{NewLine}{Exception}")
-                .WriteTo.File("logs/server-log-.txt", rollingInterval: RollingInterval.Day, outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {SourceContext} - {Message:lj}{NewLine}{Exception}")
+                .MinimumLevel.Debug() //debug , info , warn , error
+                .WriteTo.Console()
+                .WriteTo.File("logs\\server-log.txt", rollingInterval: RollingInterval.Day)
                 .CreateLogger();
 
-            NetService netService = new NetService();
-            
-            netService.Start();
 
-            MassageRouter.Instance.on<UserLoginRequest>(OnUserLoginRequest);    
-                
-            while(true){
-                Thread.Sleep(100);
+
+            //网路服务模块
+            NetService netService = new NetService();
+            netService.Start();
+            Log.Debug("网络服务启动完成");
+            UserService userService = UserService.Instance;
+            userService.Start();
+            Log.Debug("玩家服务启动完成");
+            SpaceService spaceService = SpaceService.Instance;
+            spaceService.Start();
+            Log.Debug("地图服务启动完成");
+
+            //消息订阅：用户登录请求
+            //MessageRouter.Instance.Subscribe<UserLoginRequest>(OnUserLoginRequest);
+            //Log.Debug("用户登录请求的订阅");
+
+            while (true)
+            {
+                Thread.Sleep(16);
             }
         }
 
-        private static void OnUserLoginRequest(Connection sender, UserLoginRequest message)
+        //当消息分发器发现了UserLoginRequest类型数据，就会回调该方法
+        private static void OnUserLoginRequest(Connection sender, UserLoginRequest msg)
         {
-            Log.Information("发现用户登录请求：{0} {1}", message.Username, message.Password);
+            //Log.Information("发现用户登录请求：{0} , {1}", msg.Username, msg.Password);
         }
-
-       
     }
 }
