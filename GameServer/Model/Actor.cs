@@ -1,4 +1,5 @@
-﻿using GameServer.Mgr;
+﻿using Common.Proto;
+using GameServer.Mgr;
 using Summer;
 using System;
 using System.Collections.Generic;
@@ -10,9 +11,11 @@ namespace GameServer.Model
 {
     public class Actor : Entity
     {
+        public int Id { get; set; }
         public string Name { get; set; }
-        public int Level { get; set; }
-        public Actor(int id, Vector3Int position, Vector3Int direction) : base(id, position, direction)
+        public int Speed { get; set; }
+        public NCharacter Info { get; set; } = new NCharacter();
+        public Actor(int entityId, Vector3Int position, Vector3Int direction) : base(entityId, position, direction)
         {
             
         }
