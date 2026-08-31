@@ -24,7 +24,10 @@ namespace GameServer.Model
         public void CharacterJoin(Connection conn,Character character)
         {
             Log.Information("角色进入场景：{0}", character.entityId);
-            Log.Information("获取数值{0}",conn.Get<string>());
+            conn.Set<Character>(character);     //把角色存入连接当中
+            conn.Set<Space>(this);              //把场景存入连接当中
+            character.SpaceId = this.Id;
+
             CharacterDict[character.entityId] = character;
             character.conn = conn;
             if (!ConnCharacter.ContainsKey(conn))
@@ -52,9 +55,25 @@ namespace GameServer.Model
                 conn.Send(resp);
             }
         }
-        public bool HasConnection(Connection conn)
+        
+        /// <summary>
+        /// 角色离开地图
+        /// 客户端离线，切换地图
+        /// </summary>
+        /// <param name="conn"></param>
+        /// <param name="character"></param>
+        public void CharacterLeave(Connection conn,Character character)
         {
-            return ConnCharacter.ContainsKey((Connection)conn);
+            Log.Information("角色离开场景：{0}", character.entityId);
+            conn.Set<Space>(null);                          //取消conn的场景记录
+            CharacterDict.Remove(character.entityId);
+            SpaceCharacterLeaveResponse resp = new SpaceCharacterLeaveResponse();
+            resp.EntityId = character.entityId;
+            foreach (var kv in CharacterDict)
+            {
+                kv.Value.conn.Send(resp);
+            }
+
         }
 
         /// <summary>
@@ -64,6 +83,20 @@ namespace GameServer.Model
         public void UpdateEntity(NEntitySync entitySync)
         {
             Log.Information("UpdateEntity{0}" + entitySync);
+            foreach (var kv in CharacterDict)
+            {
+                if(kv.Value.entityId == entitySync.Entity.Id)
+                {
+                    kv.Value.SetEntityData(entitySync.Entity);
+                }
+                else
+                {
+                    SpaceEntitySyncResponse resp = new SpaceEntitySyncResponse();
+                    resp.EntitySync = entitySync;
+                    kv.Value.conn.Send(resp);
+                }
+
+            }
         }
     }
 }

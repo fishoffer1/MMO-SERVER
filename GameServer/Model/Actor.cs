@@ -1,4 +1,5 @@
-﻿using Summer;
+﻿using GameServer.Mgr;
+using Summer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace GameServer.Model
         public int Level { get; set; }
         public Actor(int id, Vector3Int position, Vector3Int direction) : base(id, position, direction)
         {
-
+            
         }
     }
 }

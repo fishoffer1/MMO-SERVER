@@ -9,6 +9,9 @@ using Common;
 using Serilog;
 using Common.Proto;
 using GameServer.Service;
+using Common.Database;
+
+
 
 namespace GameServer
 {
@@ -19,11 +22,12 @@ namespace GameServer
             //初始化日志环境
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug() //debug , info , warn , error
-                .WriteTo.Console()
-                .WriteTo.File("logs\\server-log.txt", rollingInterval: RollingInterval.Day)
+                .WriteTo.Async(a => a.Console())
+                .WriteTo.Async( a => a.File("logs\\server-log.txt", rollingInterval: RollingInterval.Day))
                 .CreateLogger();
 
-
+            //Db.fsql.Insert(new DbPlayer()).ExecuteAffrows();
+            //Db.fsql.Insert(new DbCharacter()).ExecuteAffrows();
 
             //网路服务模块
             NetService netService = new NetService();

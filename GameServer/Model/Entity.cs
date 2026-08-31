@@ -14,6 +14,13 @@ namespace GameServer.Model
         private int _entityid;
         private Vector3Int position;    //位置
         private Vector3Int direction;   //方向
+        private int spaceId; 
+
+        public int SpaceId
+        {
+            get { return spaceId; }
+            set { spaceId = value; }
+        }
         
         public int entityId { get { return _entityid; } }
 
@@ -42,6 +49,16 @@ namespace GameServer.Model
             data.Position = new NVector3() { X = position.x, Y = position.y, Z = position.z };
             data.Rotation = new NVector3() { X = direction.x, Y = -direction.y, Z = -direction.z };
             return data;
+        }
+
+        public void SetEntityData(NEntity entity)
+        {
+            position.x = entity.Position.X; 
+            position.y = entity.Position.Y; 
+            position.z = entity.Position.Z;
+            direction.x = entity.Rotation.X;
+            direction.y = entity.Rotation.Y;
+            direction.z = entity.Rotation.Z;
         }
     }
 }

@@ -21,34 +21,24 @@ namespace GameServer.Service
         {
             //位置同步请求
             MessageRouter.Instance.Subscribe<SpaceEntitySyncRequest>(_SpaceEntitySyncRequest);
+            
+            //测试空间场景对象
             Space space = new Space();
             space.Name = "测试空间";
             space.Id = 3;
             spaceDict[space.Id] = space;
         }
-        public Space GetSpace(int spaceId)
+        public Space? GetSpace(int spaceId)
         {
             return spaceDict[spaceId];
         }
 
-        public Space GetConnSpace(Connection conn)
-        {
-            foreach (Space space in spaceDict.Values)
-            {
-                if (space.HasConnection(conn))
-                {
-                    return space;
-                }
-            }
-            return null;
-
-        }
-
         private void _SpaceEntitySyncRequest(Connection conn, SpaceEntitySyncRequest msg)
         {
-            //通过conn拿到角色
-            Space space = GetConnSpace(conn);
-            space.UpdateEntity(msg.EntitySync);
+            //获取当前角色
+            var sp = conn.Get<Space>();
+            if (sp == null) return;
+            sp.UpdateEntity(msg.EntitySync);
         }
     }
 }

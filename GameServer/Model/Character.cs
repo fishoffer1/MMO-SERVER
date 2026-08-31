@@ -1,4 +1,5 @@
-﻿using Summer;
+﻿using Common.Proto;
+using Summer;
 using Summer.Network;
 using System;
 using System.Collections.Generic;
@@ -16,5 +17,7 @@ namespace GameServer.Model
         {
 
         }
+
+        
     }
 }

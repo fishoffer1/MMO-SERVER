@@ -7,6 +7,7 @@ using System.Reflection;
 using Google.Protobuf.Reflection;
 using Serilog;
 using System.Linq;
+using Common.Proto;
 
 namespace Summer
 {
@@ -104,7 +105,10 @@ namespace Summer
             Type t = ProtoHelper.SeqType(typeCode);
             var desc = t.GetProperty("Descriptor").GetValue(t) as MessageDescriptor;
             var msg = desc.Parser.ParseFrom(data, offset, len);
-            Log.Information("解析消息：code={0} - {1}", typeCode, msg);
+            if(msg is not HeartBeatRequest)
+            {
+                Log.Information("解析消息：code={0} - {1}", typeCode, msg);
+            }  
             return msg;
         }
 

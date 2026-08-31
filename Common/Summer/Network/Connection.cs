@@ -75,10 +75,8 @@ namespace Summer.Network
         /// </summary>
         public void Close()
         {
-            try { _socket.Shutdown(SocketShutdown.Both); } catch { }
             _socket.Close();
-            _socket = null;
-            OnDisconnected?.Invoke(this);
+            
         }
         
 

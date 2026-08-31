@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using Summer;
 using Common;
 using Serilog;
+using GameServer.Model;
+using Common.Proto;
 
 namespace GameServer.Network
 {
@@ -26,12 +28,45 @@ namespace GameServer.Network
             tcpServer.Disconnected += OnDisconnected;
         }
 
+        //记录conn最后一次心跳包的时间
+        private Dictionary<Connection,DateTime> heartBeatPairs = new Dictionary<Connection,DateTime>();
+
+        
 
         public void Start() {
             //启动网络监听，指定消息包装类型
             tcpServer.Start();
             //启动消息分发器
             MessageRouter.Instance.Start(10);
+
+            MessageRouter.Instance.Subscribe<HeartBeatRequest>(_HeartBeatRequest);
+
+            Timer timer = new Timer(TimerCallback,null,TimeSpan.Zero,TimeSpan.FromSeconds(2));
+        }
+
+        void TimerCallback(object state)
+        {
+            Log.Information("执行检查");
+            var now = DateTime.Now;
+            foreach (var kv in heartBeatPairs)
+            {
+                var cha = now - kv.Value;
+                if (cha.TotalSeconds > 15)
+                {
+                    //关闭超时的客户端连接
+                    Connection conn = kv.Key;
+                    conn.Close();
+                    heartBeatPairs.Remove(kv.Key);
+                }
+            }
+        }
+        //收到心跳包
+        private void _HeartBeatRequest(Connection conn, HeartBeatRequest msg)
+        {
+            heartBeatPairs[conn] = DateTime.Now; 
+            Log.Information("收到心跳包" + conn);    
+            HeartBeatResponse resp = new HeartBeatResponse();
+            conn.Send(resp);
         }
 
 
@@ -39,13 +74,20 @@ namespace GameServer.Network
         private void OnClientConnected(Connection conn)
         {
             Log.Information("客户端接入");
-            conn.Set<string>("嘻嘻哈哈");
+            heartBeatPairs[conn] = DateTime.Now;
             //
         }
 
         private void OnDisconnected(Connection conn)
         {
+            heartBeatPairs.Remove(conn);
             Log.Information("连接断开:"+conn);
+            var space = conn.Get<Space>();
+            if (space != null) 
+            { 
+                var co = conn.Get<Character>();
+                space.CharacterLeave(conn, co);
+            }
         }
 
     }

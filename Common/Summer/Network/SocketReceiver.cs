@@ -63,7 +63,10 @@ namespace Summer.Network
             {
                 _disconnected();
             }
-
+            catch(ObjectDisposedException) 
+            {
+                _disconnected();
+            }
 
         }
 
@@ -104,10 +107,10 @@ namespace Summer.Network
             try
             {
                 Disconnected?.Invoke();
-                mSocket.Shutdown(SocketShutdown.Both);
+                mSocket?.Shutdown(SocketShutdown.Both);
             }
             catch { } // throws if client process has already closed
-            mSocket.Close();
+            mSocket?.Close();
             mSocket = null;
         }
 
