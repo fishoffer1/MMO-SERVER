@@ -36,9 +36,9 @@ namespace Common.Database
         public int Level { get; set; } = 1;
         public int Exp { get; set; } = 0;
         public int SpaceId { get; set; }
-        public int X { get; set; } = 0;
-        public int Y { get; set; } = 0;
-        public int Z { get; set; } = 0;
+        public int X { get; set; } = 126552;
+        public int Y { get; set; } = 32300;
+        public int Z { get; set; } = 132442;
         public long Gold { get; set; } = 0;
         public int PlayerId { get; set; }
 
