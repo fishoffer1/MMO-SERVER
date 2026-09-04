@@ -1,4 +1,5 @@
-﻿using Summer;
+﻿using Common.Proto;
+using Summer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace GameServer.Model
 {
     internal class Monster : Actor
     {
-        public Monster(int id, Vector3Int position, Vector3Int direction) : base(id, position, direction)
+        public Monster( Vector3Int position, Vector3Int direction) : base(EntityType.Monster, 0, position, direction)
         {
 
         }

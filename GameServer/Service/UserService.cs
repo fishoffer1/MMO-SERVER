@@ -66,7 +66,7 @@ namespace GameServer.Service
                 {
                     Id = item.Id,
                     Name = item.Name,
-                    TypeId = item.JobId,
+                    Tid = item.JobId,
                     //EntityId
                     Level = item.Level,
                     Exp = item.Exp,
@@ -142,7 +142,7 @@ namespace GameServer.Service
                 Mp = 100,
                 Level = 1,
                 Exp = 0,
-                SpaceId = 6,
+                SpaceId = 1,
                 Gold = 0,
                 PlayerId = player.Id
             };
@@ -191,16 +191,16 @@ namespace GameServer.Service
                 .Where(t => t.Id == msg.CharacterId)
                 .First();
             //把数据库角色变成游戏角色
-            Character character = dbRole;
+            Character character = CharacterManager.Instance.CreateCharacter(dbRole);
 
             //通知玩家登录成功
             GameEnterResponse resp = new GameEnterResponse();
             resp.Success = true;
-            resp.Entity = character.GetData();
+            resp.Entity = character.EntityData;
             resp.Character = character.Info;
             conn.Send(resp);
             //将新角色加入到地图
-            var space = SpaceService.Instance.GetSpace(3);
+            var space = SpaceService.Instance.GetSpace(dbRole.SpaceId);
             space.CharacterJoin(conn, character);
         }
     }

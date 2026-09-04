@@ -10,6 +10,7 @@ using Common;
 using Serilog;
 using GameServer.Model;
 using Common.Proto;
+using GameServer.Mgr;
 
 namespace GameServer.Network
 {
@@ -82,11 +83,13 @@ namespace GameServer.Network
         {
             heartBeatPairs.Remove(conn);
             Log.Information("连接断开:"+conn);
-            var space = conn.Get<Space>();
+            var chr = conn.Get<Character>();
+            var space = chr?.Space;
             if (space != null) 
             { 
                 var co = conn.Get<Character>();
                 space.CharacterLeave(conn, co);
+                CharacterManager.Instance.RemoveCharacter(chr.Id);
             }
         }
 

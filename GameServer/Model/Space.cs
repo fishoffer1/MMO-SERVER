@@ -14,30 +14,40 @@ namespace GameServer.Model
         public int Id { get; set; }
 
         public string Name { get; set; }
+        public SpaceDefine Def { get; set; }
 
         
-
+        //当前场景中的全部角色<ChrId,ChrObj> 
         private Dictionary<int , Character> CharacterDict = new Dictionary<int, Character>();
 
         private Dictionary<Connection, Character> ConnCharacter = new Dictionary<Connection, Character>();
-        //角色加入空间
-        public void CharacterJoin(Connection conn,Character character)
-        {
-            Log.Information("角色进入场景：{0}", character.entityId);
-            conn.Set<Character>(character);     //把角色存入连接当中
-            conn.Set<Space>(this);              //把场景存入连接当中
-            character.SpaceId = this.Id;
 
-            CharacterDict[character.entityId] = character;
-            character.conn = conn;
+        public Space(){ }
+        public Space(SpaceDefine def) 
+        {
+            this.Def = def;
+            this.Id = def.SID;
+            this.Name = def.Name;
+        }
+        //角色加入空间
+        public void CharacterJoin(Connection conn,Character chr)
+        {
+            Log.Information("角色进入场景：{0}", chr.entityId);
+            conn.Set<Character>(chr);     //把角色存入连接当中
+            
+            chr.Space = this;
+
+            CharacterDict[chr.Id] = chr;
+            chr.conn = conn;
             if (!ConnCharacter.ContainsKey(conn))
             {
-                ConnCharacter[conn] = character;
+                ConnCharacter[conn] = chr;
             }
             //把新进入的角色广播给其他玩家
             var resp = new SpaceCharactersEnterResponse();
             resp.SpaceId = this.Id;
-            resp.EntityList.Add(character.GetData());
+            chr.Info.Entity = chr.EntityData;
+            resp.CharacterList.Add(chr.Info);
             foreach (var kv in CharacterDict)
             {
                 if(kv.Value.conn != conn)
@@ -50,8 +60,8 @@ namespace GameServer.Model
             foreach (var kv in CharacterDict)
             {
                 if (kv.Value.conn == conn) continue;
-                resp.EntityList.Clear();
-                resp.EntityList.Add(kv.Value.GetData());
+                resp.CharacterList.Clear();
+                resp.CharacterList.Add(kv.Value.Info);
                 conn.Send(resp);
             }
         }
@@ -61,14 +71,14 @@ namespace GameServer.Model
         /// 客户端离线，切换地图
         /// </summary>
         /// <param name="conn"></param>
-        /// <param name="character"></param>
-        public void CharacterLeave(Connection conn,Character character)
+        /// <param name="chr"></param>
+        public void CharacterLeave(Connection conn,Character chr)
         {
-            Log.Information("角色离开场景：{0}", character.entityId);
-            conn.Set<Space>(null);                          //取消conn的场景记录
-            CharacterDict.Remove(character.entityId);
+            Log.Information("角色离开场景：{0}", chr.Id);
+            
+            CharacterDict.Remove(chr.Id);
             SpaceCharacterLeaveResponse resp = new SpaceCharacterLeaveResponse();
-            resp.EntityId = character.entityId;
+            resp.EntityId = chr.entityId;
             foreach (var kv in CharacterDict)
             {
                 kv.Value.conn.Send(resp);
@@ -87,7 +97,12 @@ namespace GameServer.Model
             {
                 if(kv.Value.entityId == entitySync.Entity.Id)
                 {
-                    kv.Value.SetEntityData(entitySync.Entity);
+                    
+                    kv.Value.EntityData = entitySync.Entity;
+                    var chr = kv.Value;//自己的角色
+                    chr.Data.X = entitySync.Entity.Position.X;
+                    chr.Data.Y = entitySync.Entity.Position.Y;
+                    chr.Data.Z = entitySync.Entity.Position.Z;
                 }
                 else
                 {

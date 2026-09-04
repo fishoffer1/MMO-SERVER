@@ -10,6 +10,7 @@ using Serilog;
 using Common.Proto;
 using GameServer.Service;
 using Common.Database;
+using Summer;
 
 
 
@@ -29,6 +30,9 @@ namespace GameServer
             //Db.fsql.Insert(new DbPlayer()).ExecuteAffrows();
             //Db.fsql.Insert(new DbCharacter()).ExecuteAffrows();
 
+            //加载Json配置文件
+            DataManager.Instance.Init();
+
             //网路服务模块
             NetService netService = new NetService();
             netService.Start();
@@ -40,6 +44,10 @@ namespace GameServer
             spaceService.Start();
             Log.Debug("地图服务启动完成");
 
+            Schedule.Instance.Start();
+            Log.Debug("中心计时器启动");
+
+           
             //消息订阅：用户登录请求
             //MessageRouter.Instance.Subscribe<UserLoginRequest>(OnUserLoginRequest);
             //Log.Debug("用户登录请求的订阅");

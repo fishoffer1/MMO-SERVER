@@ -26,57 +26,60 @@ namespace Common.Proto {
           string.Concat(
             "Cg1tZXNzYWdlLnByb3RvEgVwcm90byISChBIZWFydEJlYXRSZXF1ZXN0IhMK",
             "EUhlYXJ0QmVhdFJlc3BvbnNlIisKCE5WZWN0b3IzEgkKAXgYASABKAUSCQoB",
-            "eRgCIAEoBRIJCgF6GAMgASgFIlsKB05FbnRpdHkSCgoCaWQYASABKAUSIQoI",
-            "cG9zaXRpb24YAyABKAsyDy5wcm90by5OVmVjdG9yMxIhCghyb3RhdGlvbhgE",
-            "IAEoCzIPLnByb3RvLk5WZWN0b3IzIlAKC05FbnRpdHlTeW5jEh4KBmVudGl0",
-            "eRgBIAEoCzIOLnByb3RvLk5FbnRpdHkSIQoFc3RhdGUYAiABKA4yEi5wcm90",
-            "by5FbnRpdHlTdGF0ZSJAChZTcGFjZUVudGl0eVN5bmNSZXF1ZXN0EiYKCmVu",
-            "dGl0eVN5bmMYASABKAsyEi5wcm90by5ORW50aXR5U3luYyJBChdTcGFjZUVu",
-            "dGl0eVN5bmNSZXNwb25zZRImCgplbnRpdHlTeW5jGAEgASgLMhIucHJvdG8u",
-            "TkVudGl0eVN5bmMiJwoQR2FtZUVudGVyUmVxdWVzdBITCgtjaGFyYWN0ZXJJ",
-            "ZBgBIAEoBSJqChFHYW1lRW50ZXJSZXNwb25zZRIPCgdzdWNjZXNzGAEgASgI",
-            "Eh4KBmVudGl0eRgCIAEoCzIOLnByb3RvLk5FbnRpdHkSJAoJY2hhcmFjdGVy",
-            "GAMgASgLMhEucHJvdG8uTkNoYXJhY3RlciJTChxTcGFjZUNoYXJhY3RlcnNF",
-            "bnRlclJlc3BvbnNlEg8KB3NwYWNlSWQYASABKAUSIgoKZW50aXR5TGlzdBgC",
-            "IAMoCzIOLnByb3RvLk5FbnRpdHkiLwobU3BhY2VDaGFyYWN0ZXJMZWF2ZVJl",
-            "c3BvbnNlEhAKCGVudGl0eUlkGAEgASgFImcKB1JlcXVlc3QSMAoMdXNlclJl",
-            "Z2lzdGVyGAEgASgLMhoucHJvdG8uVXNlclJlZ2lzdGVyUmVxdWVzdBIqCgl1",
-            "c2VyTG9naW4YAiABKAsyFy5wcm90by5Vc2VyTG9naW5SZXF1ZXN0ImoKCFJl",
-            "c3BvbnNlEjEKDHVzZXJSZWdpc3RlchgBIAEoCzIbLnByb3RvLlVzZXJSZWdp",
-            "c3RlclJlc3BvbnNlEisKCXVzZXJMb2dpbhgCIAEoCzIYLnByb3RvLlVzZXJM",
-            "b2dpblJlc3BvbnNlIjkKE1VzZXJSZWdpc3RlclJlcXVlc3QSEAoIdXNlcm5h",
-            "bWUYASABKAkSEAoIcGFzc3dvcmQYAiABKAkiNQoUVXNlclJlZ2lzdGVyUmVz",
-            "cG9uc2USDAoEY29kZRgBIAEoBRIPCgdtZXNzYWdlGAIgASgJIjYKEFVzZXJM",
-            "b2dpblJlcXVlc3QSEAoIdXNlcm5hbWUYASABKAkSEAoIcGFzc3dvcmQYAiAB",
-            "KAkiQwoRVXNlckxvZ2luUmVzcG9uc2USDAoEY29kZRgBIAEoBRIPCgdtZXNz",
-            "YWdlGAIgASgJEg8KB1N1Y2Nlc3MYAyABKAgiNwoWQ2hhcmFjdGVyQ3JlYXRl",
-            "UmVxdWVzdBIMCgRuYW1lGAEgASgJEg8KB2pvYlR5cGUYAiABKAUivQEKCk5D",
-            "aGFyYWN0ZXISCgoCaWQYASABKAUSDwoHdHlwZV9pZBgCIAEoBRIRCgllbnRp",
-            "dHlfaWQYAyABKAUSDAoEbmFtZRgEIAEoCRINCgVsZXZlbBgFIAEoBRILCgNl",
-            "eHAYBiABKAMSDwoHc3BhY2VJZBgHIAEoBRIMCgRnb2xkGAggASgDEh4KBmVu",
-            "dGl0eRgJIAEoCzIOLnByb3RvLk5FbnRpdHkSCgoCaHAYCiABKAUSCgoCbXAY",
-            "CyABKAUiYQoXQ2hhcmFjdGVyQ3JlYXRlUmVzcG9uc2USDwoHc3VjY2VzcxgB",
-            "IAEoCBIPCgdtZXNzYWdlGAIgASgJEiQKCWNoYXJhY3RlchgDIAEoCzIRLnBy",
-            "b3RvLk5DaGFyYWN0ZXIiFgoUQ2hhcmFjdGVyTGlzdFJlcXVlc3QiQQoVQ2hh",
-            "cmFjdGVyTGlzdFJlc3BvbnNlEigKDWNoYXJhY3Rlckxpc3QYASADKAsyES5w",
-            "cm90by5OQ2hhcmFjdGVyIi0KFkNoYXJhY3RlckRlbGV0ZVJlcXVlc3QSEwoL",
-            "Y2hhcmFjdGVySWQYASABKAUiOwoXQ2hhcmFjdGVyRGVsZXRlUmVzcG9uc2US",
-            "DwoHc3VjY2VzcxgBIAEoCBIPCgdtZXNzYWdlGAIgASgJKjUKC0VudGl0eVN0",
-            "YXRlEggKBE5vbmUQABIICgRJZGxlEAESCAoETW92ZRACEggKBEp1bXAQA0IP",
-            "qgIMQ29tbW9uLlByb3RvYgZwcm90bzM="));
+            "eRgCIAEoBRIJCgF6GAMgASgFImoKB05FbnRpdHkSCgoCaWQYASABKAUSIQoI",
+            "cG9zaXRpb24YAiABKAsyDy5wcm90by5OVmVjdG9yMxIhCghyb3RhdGlvbhgD",
+            "IAEoCzIPLnByb3RvLk5WZWN0b3IzEg0KBXNwZWVkGAQgASgFIl8KC05FbnRp",
+            "dHlTeW5jEh4KBmVudGl0eRgBIAEoCzIOLnByb3RvLk5FbnRpdHkSIQoFc3Rh",
+            "dGUYAiABKA4yEi5wcm90by5FbnRpdHlTdGF0ZRINCgVmb3JjZRgDIAEoCCJA",
+            "ChZTcGFjZUVudGl0eVN5bmNSZXF1ZXN0EiYKCmVudGl0eVN5bmMYASABKAsy",
+            "Ei5wcm90by5ORW50aXR5U3luYyJBChdTcGFjZUVudGl0eVN5bmNSZXNwb25z",
+            "ZRImCgplbnRpdHlTeW5jGAEgASgLMhIucHJvdG8uTkVudGl0eVN5bmMiJwoQ",
+            "R2FtZUVudGVyUmVxdWVzdBITCgtjaGFyYWN0ZXJJZBgBIAEoBSJqChFHYW1l",
+            "RW50ZXJSZXNwb25zZRIPCgdzdWNjZXNzGAEgASgIEh4KBmVudGl0eRgCIAEo",
+            "CzIOLnByb3RvLk5FbnRpdHkSJAoJY2hhcmFjdGVyGAMgASgLMhEucHJvdG8u",
+            "TkNoYXJhY3RlciJZChxTcGFjZUNoYXJhY3RlcnNFbnRlclJlc3BvbnNlEg8K",
+            "B3NwYWNlSWQYASABKAUSKAoNY2hhcmFjdGVyTGlzdBgCIAMoCzIRLnByb3Rv",
+            "Lk5DaGFyYWN0ZXIiLwobU3BhY2VDaGFyYWN0ZXJMZWF2ZVJlc3BvbnNlEhAK",
+            "CGVudGl0eUlkGAEgASgFImcKB1JlcXVlc3QSMAoMdXNlclJlZ2lzdGVyGAEg",
+            "ASgLMhoucHJvdG8uVXNlclJlZ2lzdGVyUmVxdWVzdBIqCgl1c2VyTG9naW4Y",
+            "AiABKAsyFy5wcm90by5Vc2VyTG9naW5SZXF1ZXN0ImoKCFJlc3BvbnNlEjEK",
+            "DHVzZXJSZWdpc3RlchgBIAEoCzIbLnByb3RvLlVzZXJSZWdpc3RlclJlc3Bv",
+            "bnNlEisKCXVzZXJMb2dpbhgCIAEoCzIYLnByb3RvLlVzZXJMb2dpblJlc3Bv",
+            "bnNlIjkKE1VzZXJSZWdpc3RlclJlcXVlc3QSEAoIdXNlcm5hbWUYASABKAkS",
+            "EAoIcGFzc3dvcmQYAiABKAkiNQoUVXNlclJlZ2lzdGVyUmVzcG9uc2USDAoE",
+            "Y29kZRgBIAEoBRIPCgdtZXNzYWdlGAIgASgJIjYKEFVzZXJMb2dpblJlcXVl",
+            "c3QSEAoIdXNlcm5hbWUYASABKAkSEAoIcGFzc3dvcmQYAiABKAkiQwoRVXNl",
+            "ckxvZ2luUmVzcG9uc2USDAoEY29kZRgBIAEoBRIPCgdtZXNzYWdlGAIgASgJ",
+            "Eg8KB1N1Y2Nlc3MYAyABKAgiNwoWQ2hhcmFjdGVyQ3JlYXRlUmVxdWVzdBIM",
+            "CgRuYW1lGAEgASgJEg8KB2pvYlR5cGUYAiABKAUi4AEKCk5DaGFyYWN0ZXIS",
+            "CgoCaWQYASABKAUSCwoDdGlkGAIgASgFEhEKCWVudGl0eV9pZBgDIAEoBRIM",
+            "CgRuYW1lGAQgASgJEg0KBWxldmVsGAUgASgFEgsKA2V4cBgGIAEoAxIPCgdz",
+            "cGFjZUlkGAcgASgFEgwKBGdvbGQYCCABKAMSHgoGZW50aXR5GAkgASgLMg4u",
+            "cHJvdG8uTkVudGl0eRIKCgJocBgKIAEoBRIKCgJtcBgLIAEoBRIlCgplbnRp",
+            "dHlUeXBlGAwgASgOMhEucHJvdG8uRW50aXR5VHlwZSJhChdDaGFyYWN0ZXJD",
+            "cmVhdGVSZXNwb25zZRIPCgdzdWNjZXNzGAEgASgIEg8KB21lc3NhZ2UYAiAB",
+            "KAkSJAoJY2hhcmFjdGVyGAMgASgLMhEucHJvdG8uTkNoYXJhY3RlciIWChRD",
+            "aGFyYWN0ZXJMaXN0UmVxdWVzdCJBChVDaGFyYWN0ZXJMaXN0UmVzcG9uc2US",
+            "KAoNY2hhcmFjdGVyTGlzdBgBIAMoCzIRLnByb3RvLk5DaGFyYWN0ZXIiLQoW",
+            "Q2hhcmFjdGVyRGVsZXRlUmVxdWVzdBITCgtjaGFyYWN0ZXJJZBgBIAEoBSI7",
+            "ChdDaGFyYWN0ZXJEZWxldGVSZXNwb25zZRIPCgdzdWNjZXNzGAEgASgIEg8K",
+            "B21lc3NhZ2UYAiABKAkqMQoKRW50aXR5VHlwZRINCglDaGFyYWN0ZXIQABIL",
+            "CgdNb25zdGVyEAESBwoDTlBDEAIqNQoLRW50aXR5U3RhdGUSCAoETm9uZRAA",
+            "EggKBElkbGUQARIICgRNb3ZlEAISCAoESnVtcBADQg+qAgxDb21tb24uUHJv",
+            "dG9iBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
-          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Common.Proto.EntityState), }, null, new pbr::GeneratedClrTypeInfo[] {
+          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Common.Proto.EntityType), typeof(global::Common.Proto.EntityState), }, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Common.Proto.HeartBeatRequest), global::Common.Proto.HeartBeatRequest.Parser, null, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Common.Proto.HeartBeatResponse), global::Common.Proto.HeartBeatResponse.Parser, null, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Common.Proto.NVector3), global::Common.Proto.NVector3.Parser, new[]{ "X", "Y", "Z" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Common.Proto.NEntity), global::Common.Proto.NEntity.Parser, new[]{ "Id", "Position", "Rotation" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Common.Proto.NEntitySync), global::Common.Proto.NEntitySync.Parser, new[]{ "Entity", "State" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Common.Proto.NEntity), global::Common.Proto.NEntity.Parser, new[]{ "Id", "Position", "Rotation", "Speed" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Common.Proto.NEntitySync), global::Common.Proto.NEntitySync.Parser, new[]{ "Entity", "State", "Force" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Common.Proto.SpaceEntitySyncRequest), global::Common.Proto.SpaceEntitySyncRequest.Parser, new[]{ "EntitySync" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Common.Proto.SpaceEntitySyncResponse), global::Common.Proto.SpaceEntitySyncResponse.Parser, new[]{ "EntitySync" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Common.Proto.GameEnterRequest), global::Common.Proto.GameEnterRequest.Parser, new[]{ "CharacterId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Common.Proto.GameEnterResponse), global::Common.Proto.GameEnterResponse.Parser, new[]{ "Success", "Entity", "Character" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Common.Proto.SpaceCharactersEnterResponse), global::Common.Proto.SpaceCharactersEnterResponse.Parser, new[]{ "SpaceId", "EntityList" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Common.Proto.SpaceCharactersEnterResponse), global::Common.Proto.SpaceCharactersEnterResponse.Parser, new[]{ "SpaceId", "CharacterList" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Common.Proto.SpaceCharacterLeaveResponse), global::Common.Proto.SpaceCharacterLeaveResponse.Parser, new[]{ "EntityId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Common.Proto.Request), global::Common.Proto.Request.Parser, new[]{ "UserRegister", "UserLogin" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Common.Proto.Response), global::Common.Proto.Response.Parser, new[]{ "UserRegister", "UserLogin" }, null, null, null, null),
@@ -85,7 +88,7 @@ namespace Common.Proto {
             new pbr::GeneratedClrTypeInfo(typeof(global::Common.Proto.UserLoginRequest), global::Common.Proto.UserLoginRequest.Parser, new[]{ "Username", "Password" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Common.Proto.UserLoginResponse), global::Common.Proto.UserLoginResponse.Parser, new[]{ "Code", "Message", "Success" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Common.Proto.CharacterCreateRequest), global::Common.Proto.CharacterCreateRequest.Parser, new[]{ "Name", "JobType" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Common.Proto.NCharacter), global::Common.Proto.NCharacter.Parser, new[]{ "Id", "TypeId", "EntityId", "Name", "Level", "Exp", "SpaceId", "Gold", "Entity", "Hp", "Mp" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Common.Proto.NCharacter), global::Common.Proto.NCharacter.Parser, new[]{ "Id", "Tid", "EntityId", "Name", "Level", "Exp", "SpaceId", "Gold", "Entity", "Hp", "Mp", "EntityType" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Common.Proto.CharacterCreateResponse), global::Common.Proto.CharacterCreateResponse.Parser, new[]{ "Success", "Message", "Character" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Common.Proto.CharacterListRequest), global::Common.Proto.CharacterListRequest.Parser, null, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Common.Proto.CharacterListResponse), global::Common.Proto.CharacterListResponse.Parser, new[]{ "CharacterList" }, null, null, null, null),
@@ -97,6 +100,12 @@ namespace Common.Proto {
 
   }
   #region Enums
+  public enum EntityType {
+    [pbr::OriginalName("Character")] Character = 0,
+    [pbr::OriginalName("Monster")] Monster = 1,
+    [pbr::OriginalName("NPC")] Npc = 2,
+  }
+
   public enum EntityState {
     [pbr::OriginalName("None")] None = 0,
     [pbr::OriginalName("Idle")] Idle = 1,
@@ -711,6 +720,7 @@ namespace Common.Proto {
       id_ = other.id_;
       position_ = other.position_ != null ? other.position_.Clone() : null;
       rotation_ = other.rotation_ != null ? other.rotation_.Clone() : null;
+      speed_ = other.speed_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -733,7 +743,7 @@ namespace Common.Proto {
     }
 
     /// <summary>Field number for the "position" field.</summary>
-    public const int PositionFieldNumber = 3;
+    public const int PositionFieldNumber = 2;
     private global::Common.Proto.NVector3 position_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -745,7 +755,7 @@ namespace Common.Proto {
     }
 
     /// <summary>Field number for the "rotation" field.</summary>
-    public const int RotationFieldNumber = 4;
+    public const int RotationFieldNumber = 3;
     private global::Common.Proto.NVector3 rotation_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -753,6 +763,18 @@ namespace Common.Proto {
       get { return rotation_; }
       set {
         rotation_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "speed" field.</summary>
+    public const int SpeedFieldNumber = 4;
+    private int speed_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int Speed {
+      get { return speed_; }
+      set {
+        speed_ = value;
       }
     }
 
@@ -774,6 +796,7 @@ namespace Common.Proto {
       if (Id != other.Id) return false;
       if (!object.Equals(Position, other.Position)) return false;
       if (!object.Equals(Rotation, other.Rotation)) return false;
+      if (Speed != other.Speed) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -784,6 +807,7 @@ namespace Common.Proto {
       if (Id != 0) hash ^= Id.GetHashCode();
       if (position_ != null) hash ^= Position.GetHashCode();
       if (rotation_ != null) hash ^= Rotation.GetHashCode();
+      if (Speed != 0) hash ^= Speed.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -807,12 +831,16 @@ namespace Common.Proto {
         output.WriteInt32(Id);
       }
       if (position_ != null) {
-        output.WriteRawTag(26);
+        output.WriteRawTag(18);
         output.WriteMessage(Position);
       }
       if (rotation_ != null) {
-        output.WriteRawTag(34);
+        output.WriteRawTag(26);
         output.WriteMessage(Rotation);
+      }
+      if (Speed != 0) {
+        output.WriteRawTag(32);
+        output.WriteInt32(Speed);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -829,12 +857,16 @@ namespace Common.Proto {
         output.WriteInt32(Id);
       }
       if (position_ != null) {
-        output.WriteRawTag(26);
+        output.WriteRawTag(18);
         output.WriteMessage(Position);
       }
       if (rotation_ != null) {
-        output.WriteRawTag(34);
+        output.WriteRawTag(26);
         output.WriteMessage(Rotation);
+      }
+      if (Speed != 0) {
+        output.WriteRawTag(32);
+        output.WriteInt32(Speed);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
@@ -854,6 +886,9 @@ namespace Common.Proto {
       }
       if (rotation_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Rotation);
+      }
+      if (Speed != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Speed);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -882,6 +917,9 @@ namespace Common.Proto {
         }
         Rotation.MergeFrom(other.Rotation);
       }
+      if (other.Speed != 0) {
+        Speed = other.Speed;
+      }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -901,18 +939,22 @@ namespace Common.Proto {
             Id = input.ReadInt32();
             break;
           }
-          case 26: {
+          case 18: {
             if (position_ == null) {
               Position = new global::Common.Proto.NVector3();
             }
             input.ReadMessage(Position);
             break;
           }
-          case 34: {
+          case 26: {
             if (rotation_ == null) {
               Rotation = new global::Common.Proto.NVector3();
             }
             input.ReadMessage(Rotation);
+            break;
+          }
+          case 32: {
+            Speed = input.ReadInt32();
             break;
           }
         }
@@ -934,18 +976,22 @@ namespace Common.Proto {
             Id = input.ReadInt32();
             break;
           }
-          case 26: {
+          case 18: {
             if (position_ == null) {
               Position = new global::Common.Proto.NVector3();
             }
             input.ReadMessage(Position);
             break;
           }
-          case 34: {
+          case 26: {
             if (rotation_ == null) {
               Rotation = new global::Common.Proto.NVector3();
             }
             input.ReadMessage(Rotation);
+            break;
+          }
+          case 32: {
+            Speed = input.ReadInt32();
             break;
           }
         }
@@ -991,6 +1037,7 @@ namespace Common.Proto {
     public NEntitySync(NEntitySync other) : this() {
       entity_ = other.entity_ != null ? other.entity_.Clone() : null;
       state_ = other.state_;
+      force_ = other.force_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -1024,6 +1071,18 @@ namespace Common.Proto {
       }
     }
 
+    /// <summary>Field number for the "force" field.</summary>
+    public const int ForceFieldNumber = 3;
+    private bool force_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Force {
+      get { return force_; }
+      set {
+        force_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -1041,6 +1100,7 @@ namespace Common.Proto {
       }
       if (!object.Equals(Entity, other.Entity)) return false;
       if (State != other.State) return false;
+      if (Force != other.Force) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -1050,6 +1110,7 @@ namespace Common.Proto {
       int hash = 1;
       if (entity_ != null) hash ^= Entity.GetHashCode();
       if (State != global::Common.Proto.EntityState.None) hash ^= State.GetHashCode();
+      if (Force != false) hash ^= Force.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -1076,6 +1137,10 @@ namespace Common.Proto {
         output.WriteRawTag(16);
         output.WriteEnum((int) State);
       }
+      if (Force != false) {
+        output.WriteRawTag(24);
+        output.WriteBool(Force);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -1094,6 +1159,10 @@ namespace Common.Proto {
         output.WriteRawTag(16);
         output.WriteEnum((int) State);
       }
+      if (Force != false) {
+        output.WriteRawTag(24);
+        output.WriteBool(Force);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -1109,6 +1178,9 @@ namespace Common.Proto {
       }
       if (State != global::Common.Proto.EntityState.None) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) State);
+      }
+      if (Force != false) {
+        size += 1 + 1;
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -1130,6 +1202,9 @@ namespace Common.Proto {
       }
       if (other.State != global::Common.Proto.EntityState.None) {
         State = other.State;
+      }
+      if (other.Force != false) {
+        Force = other.Force;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -1157,6 +1232,10 @@ namespace Common.Proto {
             State = (global::Common.Proto.EntityState) input.ReadEnum();
             break;
           }
+          case 24: {
+            Force = input.ReadBool();
+            break;
+          }
         }
       }
     #endif
@@ -1181,6 +1260,10 @@ namespace Common.Proto {
           }
           case 16: {
             State = (global::Common.Proto.EntityState) input.ReadEnum();
+            break;
+          }
+          case 24: {
+            Force = input.ReadBool();
             break;
           }
         }
@@ -2091,7 +2174,7 @@ namespace Common.Proto {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public SpaceCharactersEnterResponse(SpaceCharactersEnterResponse other) : this() {
       spaceId_ = other.spaceId_;
-      entityList_ = other.entityList_.Clone();
+      characterList_ = other.characterList_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -2113,15 +2196,15 @@ namespace Common.Proto {
       }
     }
 
-    /// <summary>Field number for the "entityList" field.</summary>
-    public const int EntityListFieldNumber = 2;
-    private static readonly pb::FieldCodec<global::Common.Proto.NEntity> _repeated_entityList_codec
-        = pb::FieldCodec.ForMessage(18, global::Common.Proto.NEntity.Parser);
-    private readonly pbc::RepeatedField<global::Common.Proto.NEntity> entityList_ = new pbc::RepeatedField<global::Common.Proto.NEntity>();
+    /// <summary>Field number for the "characterList" field.</summary>
+    public const int CharacterListFieldNumber = 2;
+    private static readonly pb::FieldCodec<global::Common.Proto.NCharacter> _repeated_characterList_codec
+        = pb::FieldCodec.ForMessage(18, global::Common.Proto.NCharacter.Parser);
+    private readonly pbc::RepeatedField<global::Common.Proto.NCharacter> characterList_ = new pbc::RepeatedField<global::Common.Proto.NCharacter>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public pbc::RepeatedField<global::Common.Proto.NEntity> EntityList {
-      get { return entityList_; }
+    public pbc::RepeatedField<global::Common.Proto.NCharacter> CharacterList {
+      get { return characterList_; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2140,7 +2223,7 @@ namespace Common.Proto {
         return true;
       }
       if (SpaceId != other.SpaceId) return false;
-      if(!entityList_.Equals(other.entityList_)) return false;
+      if(!characterList_.Equals(other.characterList_)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -2149,7 +2232,7 @@ namespace Common.Proto {
     public override int GetHashCode() {
       int hash = 1;
       if (SpaceId != 0) hash ^= SpaceId.GetHashCode();
-      hash ^= entityList_.GetHashCode();
+      hash ^= characterList_.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -2172,7 +2255,7 @@ namespace Common.Proto {
         output.WriteRawTag(8);
         output.WriteInt32(SpaceId);
       }
-      entityList_.WriteTo(output, _repeated_entityList_codec);
+      characterList_.WriteTo(output, _repeated_characterList_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -2187,7 +2270,7 @@ namespace Common.Proto {
         output.WriteRawTag(8);
         output.WriteInt32(SpaceId);
       }
-      entityList_.WriteTo(ref output, _repeated_entityList_codec);
+      characterList_.WriteTo(ref output, _repeated_characterList_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -2201,7 +2284,7 @@ namespace Common.Proto {
       if (SpaceId != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(SpaceId);
       }
-      size += entityList_.CalculateSize(_repeated_entityList_codec);
+      size += characterList_.CalculateSize(_repeated_characterList_codec);
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -2217,7 +2300,7 @@ namespace Common.Proto {
       if (other.SpaceId != 0) {
         SpaceId = other.SpaceId;
       }
-      entityList_.Add(other.entityList_);
+      characterList_.Add(other.characterList_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -2238,7 +2321,7 @@ namespace Common.Proto {
             break;
           }
           case 18: {
-            entityList_.AddEntriesFrom(input, _repeated_entityList_codec);
+            characterList_.AddEntriesFrom(input, _repeated_characterList_codec);
             break;
           }
         }
@@ -2261,7 +2344,7 @@ namespace Common.Proto {
             break;
           }
           case 18: {
-            entityList_.AddEntriesFrom(ref input, _repeated_entityList_codec);
+            characterList_.AddEntriesFrom(ref input, _repeated_characterList_codec);
             break;
           }
         }
@@ -4168,7 +4251,7 @@ namespace Common.Proto {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public NCharacter(NCharacter other) : this() {
       id_ = other.id_;
-      typeId_ = other.typeId_;
+      tid_ = other.tid_;
       entityId_ = other.entityId_;
       name_ = other.name_;
       level_ = other.level_;
@@ -4178,6 +4261,7 @@ namespace Common.Proto {
       entity_ = other.entity_ != null ? other.entity_.Clone() : null;
       hp_ = other.hp_;
       mp_ = other.mp_;
+      entityType_ = other.entityType_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -4199,15 +4283,15 @@ namespace Common.Proto {
       }
     }
 
-    /// <summary>Field number for the "type_id" field.</summary>
-    public const int TypeIdFieldNumber = 2;
-    private int typeId_;
+    /// <summary>Field number for the "tid" field.</summary>
+    public const int TidFieldNumber = 2;
+    private int tid_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int TypeId {
-      get { return typeId_; }
+    public int Tid {
+      get { return tid_; }
       set {
-        typeId_ = value;
+        tid_ = value;
       }
     }
 
@@ -4319,6 +4403,18 @@ namespace Common.Proto {
       }
     }
 
+    /// <summary>Field number for the "entityType" field.</summary>
+    public const int EntityTypeFieldNumber = 12;
+    private global::Common.Proto.EntityType entityType_ = global::Common.Proto.EntityType.Character;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::Common.Proto.EntityType EntityType {
+      get { return entityType_; }
+      set {
+        entityType_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -4335,7 +4431,7 @@ namespace Common.Proto {
         return true;
       }
       if (Id != other.Id) return false;
-      if (TypeId != other.TypeId) return false;
+      if (Tid != other.Tid) return false;
       if (EntityId != other.EntityId) return false;
       if (Name != other.Name) return false;
       if (Level != other.Level) return false;
@@ -4345,6 +4441,7 @@ namespace Common.Proto {
       if (!object.Equals(Entity, other.Entity)) return false;
       if (Hp != other.Hp) return false;
       if (Mp != other.Mp) return false;
+      if (EntityType != other.EntityType) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -4353,7 +4450,7 @@ namespace Common.Proto {
     public override int GetHashCode() {
       int hash = 1;
       if (Id != 0) hash ^= Id.GetHashCode();
-      if (TypeId != 0) hash ^= TypeId.GetHashCode();
+      if (Tid != 0) hash ^= Tid.GetHashCode();
       if (EntityId != 0) hash ^= EntityId.GetHashCode();
       if (Name.Length != 0) hash ^= Name.GetHashCode();
       if (Level != 0) hash ^= Level.GetHashCode();
@@ -4363,6 +4460,7 @@ namespace Common.Proto {
       if (entity_ != null) hash ^= Entity.GetHashCode();
       if (Hp != 0) hash ^= Hp.GetHashCode();
       if (Mp != 0) hash ^= Mp.GetHashCode();
+      if (EntityType != global::Common.Proto.EntityType.Character) hash ^= EntityType.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -4385,9 +4483,9 @@ namespace Common.Proto {
         output.WriteRawTag(8);
         output.WriteInt32(Id);
       }
-      if (TypeId != 0) {
+      if (Tid != 0) {
         output.WriteRawTag(16);
-        output.WriteInt32(TypeId);
+        output.WriteInt32(Tid);
       }
       if (EntityId != 0) {
         output.WriteRawTag(24);
@@ -4424,6 +4522,10 @@ namespace Common.Proto {
       if (Mp != 0) {
         output.WriteRawTag(88);
         output.WriteInt32(Mp);
+      }
+      if (EntityType != global::Common.Proto.EntityType.Character) {
+        output.WriteRawTag(96);
+        output.WriteEnum((int) EntityType);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -4439,9 +4541,9 @@ namespace Common.Proto {
         output.WriteRawTag(8);
         output.WriteInt32(Id);
       }
-      if (TypeId != 0) {
+      if (Tid != 0) {
         output.WriteRawTag(16);
-        output.WriteInt32(TypeId);
+        output.WriteInt32(Tid);
       }
       if (EntityId != 0) {
         output.WriteRawTag(24);
@@ -4479,6 +4581,10 @@ namespace Common.Proto {
         output.WriteRawTag(88);
         output.WriteInt32(Mp);
       }
+      if (EntityType != global::Common.Proto.EntityType.Character) {
+        output.WriteRawTag(96);
+        output.WriteEnum((int) EntityType);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -4492,8 +4598,8 @@ namespace Common.Proto {
       if (Id != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(Id);
       }
-      if (TypeId != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(TypeId);
+      if (Tid != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Tid);
       }
       if (EntityId != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(EntityId);
@@ -4522,6 +4628,9 @@ namespace Common.Proto {
       if (Mp != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(Mp);
       }
+      if (EntityType != global::Common.Proto.EntityType.Character) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) EntityType);
+      }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -4537,8 +4646,8 @@ namespace Common.Proto {
       if (other.Id != 0) {
         Id = other.Id;
       }
-      if (other.TypeId != 0) {
-        TypeId = other.TypeId;
+      if (other.Tid != 0) {
+        Tid = other.Tid;
       }
       if (other.EntityId != 0) {
         EntityId = other.EntityId;
@@ -4570,6 +4679,9 @@ namespace Common.Proto {
       if (other.Mp != 0) {
         Mp = other.Mp;
       }
+      if (other.EntityType != global::Common.Proto.EntityType.Character) {
+        EntityType = other.EntityType;
+      }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -4590,7 +4702,7 @@ namespace Common.Proto {
             break;
           }
           case 16: {
-            TypeId = input.ReadInt32();
+            Tid = input.ReadInt32();
             break;
           }
           case 24: {
@@ -4630,6 +4742,10 @@ namespace Common.Proto {
           }
           case 88: {
             Mp = input.ReadInt32();
+            break;
+          }
+          case 96: {
+            EntityType = (global::Common.Proto.EntityType) input.ReadEnum();
             break;
           }
         }
@@ -4652,7 +4768,7 @@ namespace Common.Proto {
             break;
           }
           case 16: {
-            TypeId = input.ReadInt32();
+            Tid = input.ReadInt32();
             break;
           }
           case 24: {
@@ -4692,6 +4808,10 @@ namespace Common.Proto {
           }
           case 88: {
             Mp = input.ReadInt32();
+            break;
+          }
+          case 96: {
+            EntityType = (global::Common.Proto.EntityType) input.ReadEnum();
             break;
           }
         }

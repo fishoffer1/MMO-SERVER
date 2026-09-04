@@ -11,54 +11,75 @@ namespace GameServer.Model
     //世界进行同步的实体
     public class Entity
     {
+        private int speed;              //移动速度
         private int _entityid;
         private Vector3Int position;    //位置
         private Vector3Int direction;   //方向
-        private int spaceId; 
 
-        public int SpaceId
-        {
-            get { return spaceId; }
-            set { spaceId = value; }
-        }
+        private NEntity netObj;         //网络对象
+        private long _lastUpdate;       //最后一次更新位置的时间戳
         
-        public int entityId { get { return _entityid; } }
+        public int entityId { get { return netObj.Id; } }
 
         public Vector3Int Position 
         { 
             get { return position; } 
-            set { position = value; }
+            set { 
+                position = value;
+                netObj.Position = value;
+                _lastUpdate = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+            }
         }
         public Vector3Int Direction
         {
             get { return direction; }
-            set { direction = value; }
+            set { 
+                direction = value;
+                netObj.Rotation = value;
+            }
         }
 
-        public Entity(int id, Vector3Int position, Vector3Int direction)
-        {
-            this._entityid = id;
-            this.position = position;
-            this.direction = direction;
+        public int Speed 
+        { 
+            get{ return speed; } 
+            set{ 
+                speed = value; 
+                netObj.Speed = value;
+            }
         }
 
-        public NEntity GetData()
+        /// <summary>
+        /// 距离上次位置更新的间隔(秒)
+        /// </summary>
+        public float PositionTime
         {
-            var data = new NEntity();
-            data.Id = this.entityId;
-            data.Position = new NVector3() { X = position.x, Y = position.y, Z = position.z };
-            data.Rotation = new NVector3() { X = direction.x, Y = -direction.y, Z = -direction.z };
-            return data;
+            get
+            {
+                return (DateTimeOffset.Now.ToUnixTimeMilliseconds() - _lastUpdate) * 0.001f;
+            }
         }
 
-        public void SetEntityData(NEntity entity)
+
+        public Entity( Vector3Int pos, Vector3Int dir)
         {
-            position.x = entity.Position.X; 
-            position.y = entity.Position.Y; 
-            position.z = entity.Position.Z;
-            direction.x = entity.Rotation.X;
-            direction.y = entity.Rotation.Y;
-            direction.z = entity.Rotation.Z;
+            netObj = new NEntity();
+            Position = pos;
+            Direction = dir;
+            
         }
+        public NEntity EntityData 
+        {
+            get { return netObj;  } 
+            set 
+            { 
+                netObj = value;
+                Position = netObj.Position;
+                Direction = netObj.Rotation;
+                Speed = netObj.Speed;
+            }
+        }
+       
+
+       
     }
 }
