@@ -18,12 +18,12 @@ namespace GameServer.Model
         public Connection conn;
         //当前角色的数据库数据对象
         public DbCharacter Data;
-        public Character(Vector3Int position, Vector3Int direction) : base(EntityType.Character, 0, position, direction)
+        public Character(Vector3Int position, Vector3Int direction) : base(EntityType.Character, 0,0, position, direction)
         {
 
         }
 
-        public Character(DbCharacter dbChr):base(EntityType.Character, dbChr.JobId, new Vector3Int(dbChr.X, dbChr.Y, dbChr.Z),Vector3Int.zero)
+        public Character(DbCharacter dbChr):base(EntityType.Character, dbChr.JobId,dbChr.Level, new Vector3Int(dbChr.X, dbChr.Y, dbChr.Z),Vector3Int.zero)
         {
             UnitDefine ud = DataManager.Instance.Units[dbChr.JobId];
             this.Id = dbChr.Id;
@@ -31,7 +31,6 @@ namespace GameServer.Model
             this.Info.Id = dbChr.Id;
             this.Info.Name = dbChr.Name;
             this.Info.Tid = dbChr.JobId;
-            this.Info.Level = dbChr.Level;
             this.Info.Exp = dbChr.Exp;
             this.Info.SpaceId = dbChr.SpaceId;
             this.Info.Gold = dbChr.Gold;

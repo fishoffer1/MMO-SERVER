@@ -1,4 +1,5 @@
 ﻿using Common.Proto;
+using GameServer.Mgr;
 using Serilog;
 using Summer.Network;
 using System;
@@ -19,15 +20,20 @@ namespace GameServer.Model
         
         //当前场景中的全部角色<ChrId,ChrObj> 
         private Dictionary<int , Character> CharacterDict = new Dictionary<int, Character>();
+        //当前场景中的全部怪物<MonsterId,ChrObj>
+        private Dictionary<int , Monster> MonsterDict = new Dictionary<int, Monster>();
 
         private Dictionary<Connection, Character> ConnCharacter = new Dictionary<Connection, Character>();
 
-        public Space(){ }
+        public MonsterManager MonsterManager = new MonsterManager();
+
+   
         public Space(SpaceDefine def) 
         {
             this.Def = def;
             this.Id = def.SID;
             this.Name = def.Name;
+            MonsterManager.Init(this);
         }
         //角色加入空间
         public void CharacterJoin(Connection conn,Character chr)
@@ -35,7 +41,7 @@ namespace GameServer.Model
             Log.Information("角色进入场景：{0}", chr.entityId);
             conn.Set<Character>(chr);     //把角色存入连接当中
             
-            chr.Space = this;
+            chr.OnEnterSpace(this);
 
             CharacterDict[chr.Id] = chr;
             chr.conn = conn;
@@ -46,7 +52,7 @@ namespace GameServer.Model
             //把新进入的角色广播给其他玩家
             var resp = new SpaceCharactersEnterResponse();
             resp.SpaceId = this.Id;
-            chr.Info.Entity = chr.EntityData;
+            
             resp.CharacterList.Add(chr.Info);
             foreach (var kv in CharacterDict)
             {
@@ -57,13 +63,19 @@ namespace GameServer.Model
                 }
                 
             }
+            //新上线的玩家需要获取全部角色
+            resp.CharacterList.Clear();
             foreach (var kv in CharacterDict)
             {
                 if (kv.Value.conn == conn) continue;
-                resp.CharacterList.Clear();
                 resp.CharacterList.Add(kv.Value.Info);
-                conn.Send(resp);
+                
             }
+            foreach (var kv in MonsterDict)
+            {            
+                resp.CharacterList.Add(kv.Value.Info);
+            }
+            conn.Send(resp);
         }
         
         /// <summary>
@@ -111,6 +123,19 @@ namespace GameServer.Model
                     kv.Value.conn.Send(resp);
                 }
 
+            }
+        }
+
+        public void MonsterEnter(Monster mon)
+        {
+            MonsterDict[mon.Id] = mon;
+            mon.OnEnterSpace(this);
+            var resp = new SpaceCharactersEnterResponse();
+            resp.SpaceId = this.Id;
+            resp.CharacterList.Add(mon.Info);
+            foreach (var kv in CharacterDict)
+            {
+                kv.Value.conn.Send(resp);
             }
         }
     }

@@ -11,6 +11,8 @@ using Common.Proto;
 using GameServer.Service;
 using Common.Database;
 using Summer;
+using GameServer.Model;
+using GameServer.Mgr;
 
 
 
@@ -48,6 +50,13 @@ namespace GameServer
             Log.Debug("中心计时器启动");
 
            
+            Space space = SpaceService.Instance.GetSpace(1);
+            space.MonsterManager.Create(1002,3, new Vector3Int(125807, 0, 165282),Vector3Int.zero);
+
+            Schedule.Instance.AddTask(() => {
+                EntityManager.Instance.Update();    
+            }, 0.02f);
+
             //消息订阅：用户登录请求
             //MessageRouter.Instance.Subscribe<UserLoginRequest>(OnUserLoginRequest);
             //Log.Debug("用户登录请求的订阅");

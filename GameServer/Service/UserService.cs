@@ -191,6 +191,15 @@ namespace GameServer.Service
                 .Where(t => t.Id == msg.CharacterId)
                 .First();
             //把数据库角色变成游戏角色
+            Character old = CharacterManager.Instance.GetCharacter(msg.CharacterId);
+            if (old != null && old.conn != conn)
+            {
+                Log.Information("角色已在线，顶掉旧连接");
+                var sp = old.Space;
+                sp?.CharacterLeave(old.conn, old);
+                CharacterManager.Instance.RemoveCharacter(old.Id);
+                try { old.conn.Close(); } catch { }
+            }
             Character character = CharacterManager.Instance.CreateCharacter(dbRole);
 
             //通知玩家登录成功

@@ -55,10 +55,19 @@ namespace GameServer.Mgr
             lock(this)
             {
                     return index++; 
-                }
+            }
 
-           }
-            
+        }  
+        
+
+        public void Update()
+        {
+            foreach(var entity in AllEntities)
+            {
+                entity.Value.Update();
+            }
         }
+            
     }
+}
 

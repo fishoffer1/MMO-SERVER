@@ -1,11 +1,12 @@
 ﻿using Common.Proto;
+using GameServer.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Summer
+namespace GameServer
 {
     //
     // 摘要:
@@ -440,13 +441,21 @@ namespace Summer
         {
             return new NVector3() { X = v.x, Y = v.y, Z = v.z };
         }
+        public static implicit operator Vector3Int(Vector3 v)
+        {
+            return new Vector3Int() { x = (int)v.x, y = (int)v.y, z = (int)v.z };
+        }
+        public static implicit operator Vector3(Vector3Int v)
+        {
+            return new Vector3() { x = v.x, y = v.y, z = v.z };
+        }
         //
         // 摘要:
         //     Returns true if the objects are equal.
         //
         // 参数:
         //   other:
-        
+
         public override bool Equals(object other)
         {
             if (!(other is Vector3Int))

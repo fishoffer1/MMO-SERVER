@@ -14,21 +14,30 @@ namespace GameServer.Model
     /// </summary>
     public class Actor : Entity
     {
-        public int Id { get; set; }
+        public int Id { get { return Info.Id; } set{ Info.Id = value; } }
         public string Name { get; set; }
         public Space Space { get; set; }
-        public EntityType Type { get; set; }
+        public EntityType Type { get { return Info.EntityType; } set { Info.EntityType = value; } }
 
         public NCharacter Info { get; set; } = new NCharacter();
         public UnitDefine Define { get; set; }
-        public Actor(EntityType Type,int TID, Vector3Int position, Vector3Int direction) : base( position, direction)
+        public EntityState State;
+        public Actor(EntityType Type,int TID,int level, Vector3Int position, Vector3Int direction) : base( position, direction)
         {
-            this.Type = Type;
             this.Define = DataManager.Instance.Units[TID];
             this.Info.Name = Define.Name;
             this.Info.Tid = TID;
             this.Info.EntityType = Type;
+            this.Info.Level = level;
+            this.Info.Entity = this.EntityData;
             this.Speed = Define.Speed;
+        }
+
+        public void OnEnterSpace(Space space)
+        {
+            this.Space = space;
+            this.Info.SpaceId = space.Id;
+            //EntityManager.Instance.AddEntity(space.Id, this);
         }
     }
 }

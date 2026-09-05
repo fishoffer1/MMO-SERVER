@@ -72,14 +72,17 @@ namespace GameServer.Model
             get { return netObj;  } 
             set 
             { 
-                netObj = value;
-                Position = netObj.Position;
-                Direction = netObj.Rotation;
-                Speed = netObj.Speed;
+                // netObj = value;
+                Position = value.Position;
+                Direction = value.Rotation;
+                Speed = value.Speed;
             }
         }
        
+        public virtual void Update()
+        {
 
+        }
        
     }
 }
