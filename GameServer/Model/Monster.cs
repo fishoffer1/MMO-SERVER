@@ -1,4 +1,5 @@
 ﻿using Common.Proto;
+using GameServer.AI;
 using GameServer.Core;
 using Summer;
 using System;
@@ -13,9 +14,13 @@ namespace GameServer.Model
     public class Monster : Actor
     {
 
+        public AIBase AI;
+        public Actor target;            //目标
         public Vector3 moveTarget;      //移动的目标
         public Vector3 movePosition;    //当前移动位置
         public Vector3 initPosition;    //出生点
+        public static Vector3Int Y1000 = new Vector3Int(0, 1000, 0);
+        Random rand = new Random();
 
         public Monster(int tid,int level, Vector3Int pos,Vector3Int dir) : base(EntityType.Monster, tid, level, pos, dir)
         {
@@ -24,13 +29,7 @@ namespace GameServer.Model
             State = EntityState.Idle;
             
             Random rand = new Random();
-            Schedule.Instance.AddTask(() =>
-            {
-                float x = pos.x + (rand.NextSingle() * 10f - 5f) * 1000f;
-                float z = pos.x + (rand.NextSingle() * 10f - 5f) * 1000f;
-                MoveTo(new Vector3(x, 0, z));
-            }, 15);
-
+            //位置同步
             Schedule.Instance.AddTask(() =>
             {
                 if (State != EntityState.Move) return;
@@ -40,6 +39,12 @@ namespace GameServer.Model
                 es.State = State;
                 this.Space.UpdateEntity(es);
             }, 0.1f);
+            //设置AI对象
+            switch (Define.AI)
+            {
+                case "Monster":
+                    this.AI = new MonsterAI(this); break;
+            }
         }
 
         public void MoveTo(Vector3 target)
@@ -73,12 +78,13 @@ namespace GameServer.Model
         }
 
         public override void Update()
-        {
+        { 
+            AI?.Update();
             if(State == EntityState.Move)
             {
                 //移动反向
                 var dir = (moveTarget - movePosition).normalized;
-                this.Direction = LookRotation(dir)*1000;
+                this.Direction = LookRotation(dir)*Y1000;
                 float dist = Speed * Time.deltaTime;
                 if (Vector3.Distance(moveTarget, movePosition) < dist)
                 {
@@ -109,6 +115,14 @@ namespace GameServer.Model
             return eulerAngles;
         }
 
+        //计算出生点附近的随机坐标
 
+        public Vector3 RandomPointWithBirth(float range)
+        {
+            float x = rand.NextSingle() * 2f - 1f;
+            float z = rand.NextSingle() * 2f - 1f;
+            Vector3 dir = new Vector3(x,0,z).normalized;
+            return initPosition + dir * range * rand.NextSingle();
+        }
     }
 }

@@ -6,10 +6,12 @@ public class DataManager : Singleton<DataManager>
 {
     public Dictionary<int, SpaceDefine> Spaces ;
     public Dictionary<int, UnitDefine> Units ;
+    public Dictionary<int, SpawnDefine> Spawns ;
     public void Init()
     {
         Spaces = Load<SpaceDefine>("Data/SpaceDefine.json");
         Units = Load<UnitDefine>("Data/UnitDefine.json");
+        Spawns = Load<SpawnDefine>("Data/SpawnDefine.json");
 
     }
 

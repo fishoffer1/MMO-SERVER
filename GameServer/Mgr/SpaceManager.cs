@@ -33,5 +33,13 @@ namespace GameServer.Mgr
         {
             return dict.GetValueOrDefault(spaceId, null);
         }
+
+        public void Update() 
+        {
+            foreach(var s in dict.Values)
+            {
+                s?.Update();
+            }
+        }
     }
 }

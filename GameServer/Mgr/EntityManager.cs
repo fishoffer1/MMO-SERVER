@@ -16,7 +16,7 @@ namespace GameServer.Mgr
     {
         private int index = 1;
         //记录全部的Entity对象，<EntityId,Entity>
-        private Dictionary<int, Model.Entity> AllEntities = new Dictionary<int, Model.Entity>();
+        private Dictionary<int, Entity> AllEntities = new Dictionary<int, Entity>();
         //记录场景里的Entity列表，<SpaceId,EntityList>
         private Dictionary<int, List<Entity>> SpaceEntities = new Dictionary<int, List<Entity>>();
         
@@ -46,10 +46,38 @@ namespace GameServer.Mgr
             }
         }
 
+        public bool Exist(int spaceId)
+        {
+            return AllEntities.ContainsKey(spaceId);
+        }
+
         public Entity GetEntity(int entityId)
         {
            return AllEntities.GetValueOrDefault(entityId, null);
         }
+        
+        //查找Entity对象
+        public List<T> GetEntityList<T>(int spaceId,Predicate<T> match) where T : Entity
+        {
+          return SpaceEntities[spaceId]
+                .OfType<T>()
+                .Where(entity => match.Invoke(entity))
+                .ToList();
+        }
+
+        //查找最近的对象
+        public T GetNearest<T>(int spaceId , Vector3Int center ,int range) where T : Entity
+        {
+            Predicate<T> match = (e) =>
+            {
+                return Vector3Int.Distance(center, e.Position) <= range;
+            };
+            var entity = GetEntityList<T>(spaceId,match)
+                .OrderBy(e => Vector3Int.Distance(center , e.Position))
+                .FirstOrDefault();
+            return entity;
+        }
+
         public int NewEntityId()
         {
             lock(this)

@@ -129,7 +129,7 @@ namespace Summer.Network
             Log.Information("worker thread start");
             try
             {
-                WorkerCount = Interlocked.Increment(ref WorkerCount);
+                Interlocked.Increment(ref WorkerCount);
                 while (_running)
                 {
                     if (messageQueue.Count == 0)
@@ -157,7 +157,7 @@ namespace Summer.Network
             }
             finally
             {
-                WorkerCount = Interlocked.Decrement(ref WorkerCount);
+                Interlocked.Decrement(ref WorkerCount);
             }
             Log.Information("worker thread end");
         }

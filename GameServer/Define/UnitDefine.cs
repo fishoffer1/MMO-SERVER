@@ -29,6 +29,7 @@ public class UnitDefine
 	public float GSTR; // 力量成长
 	public float GINT; // 智力成长
 	public float GAGI; // 敏捷成长
+	public string AI; // AI名称
 }
 
 

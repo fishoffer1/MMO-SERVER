@@ -54,16 +54,20 @@ namespace Summer
             int interval = GetInterval(timeValue, timeUnit);
             long startTime = GetCurrentTime() + interval;
             Task task = new Task(taskMethod, startTime, interval, repeatCount);
-            tasks.Add(task);
+            lock (this) 
+            {
+                tasks.Add(task);
+            }
         }
 
         public void RemoveTask(Action taskMethod)
         {
             Task taskToRemove = tasks.Find(task => task.TaskMethod == taskMethod);
-            if (taskToRemove != null)
-            {
-                tasks.Remove(taskToRemove);
-            }
+           
+                lock (tasks) 
+                {   
+                    tasks.RemoveAll(task => task.TaskMethod == taskMethod);
+                }
         }
 
 
@@ -80,19 +84,20 @@ namespace Summer
                 Time.Tick();
                 long startTime = GetCurrentTime();
                 // 把完毕的任务移除
-                List<Task> tasksToRemove = tasks.FindAll(task => task.Completed);
-                foreach (Task task in tasksToRemove)
+                lock (tasks)
                 {
-                    tasks.Remove(task);
-                }
-                // 执行任务
-                foreach (Task task in tasks)
-                {
-                    if (task.ShouldRun())
+                    tasks.RemoveAll(task => task.Completed);
+                    // 执行任务
+                    foreach (Task task in tasks)
                     {
-                        task.Run();
+                        if (task.ShouldRun())
+                        {
+                            task.Run();
+                        }
                     }
                 }
+                
+                
                 // 控制周期
                 long endTime = GetCurrentTime();
                 int msTime = (int)(interval - (endTime - startTime));
@@ -203,6 +208,11 @@ namespace Summer
 
     public class Time
     {
+        private static long startTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+        /// <summary>
+        /// 游戏的运行时间（秒）
+        /// </summary>
+        public static float time {  get;private set; }
         /// <summary>
         /// 获取上一帧运行所用的时间
         /// </summary>
@@ -217,7 +227,7 @@ namespace Summer
         public static void Tick()
         {
             long now = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-
+            time = (now - startTime)*0.001f;
             if (lastTick == 0) lastTick = now;
             deltaTime = (now - lastTick) * 0.001f;
             lastTick = now;

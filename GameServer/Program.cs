@@ -13,6 +13,7 @@ using Common.Database;
 using Summer;
 using GameServer.Model;
 using GameServer.Mgr;
+using GameServer.AI;
 
 
 
@@ -52,9 +53,11 @@ namespace GameServer
            
             Space space = SpaceService.Instance.GetSpace(1);
             space.MonsterManager.Create(1002,3, new Vector3Int(125807, 0, 165282),Vector3Int.zero);
+            //mon.AI = new MonsterAI(mon);
 
             Schedule.Instance.AddTask(() => {
-                EntityManager.Instance.Update();    
+                EntityManager.Instance.Update();
+                SpaceManager.Instance.Update();
             }, 0.02f);
 
             //消息订阅：用户登录请求

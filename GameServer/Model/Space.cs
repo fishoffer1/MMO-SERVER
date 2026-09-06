@@ -26,7 +26,10 @@ namespace GameServer.Model
         private Dictionary<Connection, Character> ConnCharacter = new Dictionary<Connection, Character>();
 
         public MonsterManager MonsterManager = new MonsterManager();
+        public SpawnManager SpawnManager = new SpawnManager();
+        
 
+        
    
         public Space(SpaceDefine def) 
         {
@@ -34,6 +37,7 @@ namespace GameServer.Model
             this.Id = def.SID;
             this.Name = def.Name;
             MonsterManager.Init(this);
+            SpawnManager.Init(this);
         }
         //角色加入空间
         public void CharacterJoin(Connection conn,Character chr)
@@ -111,10 +115,6 @@ namespace GameServer.Model
                 {
                     
                     kv.Value.EntityData = entitySync.Entity;
-                    var chr = kv.Value;//自己的角色
-                    chr.Data.X = entitySync.Entity.Position.X;
-                    chr.Data.Y = entitySync.Entity.Position.Y;
-                    chr.Data.Z = entitySync.Entity.Position.Z;
                 }
                 else
                 {
@@ -137,6 +137,11 @@ namespace GameServer.Model
             {
                 kv.Value.conn.Send(resp);
             }
+        }
+
+        public void Update()
+        {
+            this.SpawnManager.Update();
         }
     }
 }

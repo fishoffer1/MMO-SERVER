@@ -1,4 +1,5 @@
 ﻿using Common.Database;
+using Common.Proto;
 using FreeSql;
 using GameServer.Model;
 using Summer;
@@ -58,6 +59,10 @@ namespace GameServer.Mgr
         {
             foreach(var chr in Characters.Values)
             {
+             
+                chr.Data.X = chr.Position.x;
+                chr.Data.Y = chr.Position.y;
+                chr.Data.Z = chr.Position.z;
                 repo.UpdateAsync(chr.Data);
             }
         }
