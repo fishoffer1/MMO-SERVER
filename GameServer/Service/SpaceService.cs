@@ -1,4 +1,5 @@
 ﻿using Common.Proto;
+using GameServer.Core;
 using GameServer.Mgr;
 using GameServer.Model;
 using Serilog;
@@ -36,7 +37,7 @@ namespace GameServer.Service
         private void _SpaceEntitySyncRequest(Connection conn, SpaceEntitySyncRequest msg)
         {
             //获取当前角色所在的地图
-            var space = conn.Get<Character>()?.Space;
+            var space = conn.Get<Session>().Space;
             if (space == null) return;
 
             //同步请求信息

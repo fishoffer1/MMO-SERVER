@@ -38,6 +38,7 @@ namespace GameServer.Model
             this.Info.Mp = dbChr.Mp;
             this.Data = dbChr;
             this.Speed = ud.Speed;
+            this.Attr.Init(Define, Info.Level);
         }
         
         public static implicit operator Character(DbCharacter dbChr)

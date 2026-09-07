@@ -1,5 +1,6 @@
 ﻿using Common.Database;
 using Common.Proto;
+using GameServer.Core;
 using GameServer.Mgr;
 using GameServer.Model;
 using Serilog;
@@ -37,7 +38,7 @@ namespace GameServer.Service
         /// <param name="msg"></param>
         private void _CharacterDeleteRequest(Connection conn, CharacterDeleteRequest msg)
         {
-            var player = conn.Get<DbPlayer>();
+            var player = conn.Get<Session>().DbPlayer;
             Db.fsql.Delete<DbCharacter>()
                     .Where(t=>t.Id == msg.CharacterId)
                     .Where(t=>t.PlayerId == player.Id)
@@ -56,7 +57,7 @@ namespace GameServer.Service
         /// <param name="msg"></param>
         private void _CharacterListRequest(Connection conn, CharacterListRequest msg)
         {
-            var player = conn.Get<DbPlayer>();
+            var player = conn.Get<Session>().DbPlayer;
             //从数据库查询出当前玩家的全部角色
             var list = Db.fsql.Select<DbCharacter>().Where(t => t.PlayerId == player.Id).ToList();
             CharacterListResponse listResp = new CharacterListResponse();
@@ -88,7 +89,7 @@ namespace GameServer.Service
         {
             CharacterCreateResponse resp = new CharacterCreateResponse();
             Log.Information("创建角色:{0}", msg);
-           var player =  conn.Get<DbPlayer>();
+           var player =  conn.Get<Session>().DbPlayer;
             if(player == null)
             {
                 resp.Success = false;
@@ -169,6 +170,7 @@ namespace GameServer.Service
                 resp.Success = true; // 登录成功
                 resp.Message = "登录成功";
                 conn.Set<DbPlayer>(dbPlayer); //登录成功，在conn里记录用户信息
+                conn.Get<Session>().DbPlayer = dbPlayer;
             }
             else
             {
@@ -184,7 +186,7 @@ namespace GameServer.Service
             Log.Information($"收到玩家进入游戏请求，角色ID：{msg.CharacterId}");
             
             //获取当前玩家
-            var player = conn.Get<DbPlayer>();
+            var player = conn.Get<Session>().DbPlayer;
             //查询数据库的角色
             var dbRole = Db.fsql.Select<DbCharacter>()
                 .Where(t => t.PlayerId == player.Id)

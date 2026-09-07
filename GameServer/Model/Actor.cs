@@ -1,4 +1,5 @@
 ﻿using Common.Proto;
+using GameServer.Battle;
 using GameServer.Mgr;
 using Summer;
 using System;
@@ -22,6 +23,7 @@ namespace GameServer.Model
         public NCharacter Info { get; set; } = new NCharacter();
         public UnitDefine Define { get; set; }
         public EntityState State;
+        public Attributes Attr { get; set; } = new Attributes();
         public bool IsDeath; //角色是否死亡
         public Actor(EntityType Type,int TID,int level, Vector3Int position, Vector3Int direction) : base( position, direction)
         {

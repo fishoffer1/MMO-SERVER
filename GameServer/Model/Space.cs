@@ -1,4 +1,5 @@
 ﻿using Common.Proto;
+using GameServer.Core;
 using GameServer.Mgr;
 using Serilog;
 using Summer.Network;
@@ -44,7 +45,7 @@ namespace GameServer.Model
         {
             Log.Information("角色进入场景：{0}", chr.entityId);
             conn.Set<Character>(chr);     //把角色存入连接当中
-            
+            conn.Get<Session>().Character = chr;
             chr.OnEnterSpace(this);
 
             CharacterDict[chr.Id] = chr;
