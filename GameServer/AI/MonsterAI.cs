@@ -1,5 +1,5 @@
 ﻿using Assets.Plugins.Summer.Network.Core.FSM;
-using Common.Proto;
+using Proto;
 using GameServer.Core;
 using GameServer.FSM;
 using GameServer.Mgr;
@@ -56,8 +56,10 @@ namespace GameServer.AI
                 var mon = P.Owner;
 
                 //查询8000范围内的玩家
-                var chr = EntityManager.Instance
-                    .GetNearest<Character>(mon.Space.Id, mon.Position, P.viewRange);
+                var chr = Game.RangeUnit(mon.Space.Id, mon.Position, P.viewRange)
+                    .OfType<Character>()
+                    .OrderBy(e => Vector3Int.Distance(mon.Position, e.Position))
+                    .FirstOrDefault(a => !a.IsDeath);
                 //Log.Information("最近的目标：{0}", chr);
                 if (chr != null)
                 {

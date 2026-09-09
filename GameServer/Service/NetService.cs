@@ -9,7 +9,7 @@ using Summer;
 using Common;
 using Serilog;
 using GameServer.Model;
-using Common.Proto;
+using Proto;
 using GameServer.Mgr;
 using GameServer.Core;
 
@@ -90,7 +90,7 @@ namespace GameServer.Network
             if (space != null) 
             { 
                
-                space.CharacterLeave(conn, chr);
+                space.CharacterLeave(chr);
                 CharacterManager.Instance.RemoveCharacter(chr.Id);
             }
         }

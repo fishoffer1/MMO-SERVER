@@ -1,6 +1,7 @@
-﻿using Common.Proto;
+﻿using Common;
 using GameServer.AI;
 using GameServer.Core;
+using Proto;
 using Summer;
 using System;
 using System.Collections.Generic;
@@ -30,11 +31,11 @@ namespace GameServer.Model
             
             Random rand = new Random();
             //位置同步
-            Schedule.Instance.AddTask(() =>
+            Scheduler.Instance.AddTask(() =>
             {
                 if (State != EntityState.Move) return;
                 //广播消息
-                NEntitySync es = new NEntitySync();
+                NetEntitySync es = new NetEntitySync();
                 es.Entity = EntityData;
                 es.State = State;
                 this.Space.UpdateEntity(es);
@@ -59,7 +60,7 @@ namespace GameServer.Model
                 movePosition = Position;
                 //Direction = (moveTarget - movePosition).normalized;
                 //广播消息
-                NEntitySync es = new NEntitySync();
+                NetEntitySync es = new NetEntitySync();
                 es.Entity = EntityData;
                 es.State = State;
                 this.Space.UpdateEntity(es);
@@ -71,7 +72,7 @@ namespace GameServer.Model
             State = EntityState.Idle;
             movePosition = moveTarget;
             //广播消息
-            NEntitySync es = new NEntitySync();
+            NetEntitySync es = new NetEntitySync();
             es.Entity = EntityData;
             es.State = State;
             this.Space.UpdateEntity(es);
@@ -79,6 +80,7 @@ namespace GameServer.Model
 
         public override void Update()
         { 
+            base.Update();
             AI?.Update();
             if(State == EntityState.Move)
             {

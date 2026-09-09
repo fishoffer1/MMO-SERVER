@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 namespace GameServer.Battle
 {
     /// <summary>
-    /// 属性数据项
+    /// 属性数据
     /// </summary>
-    public class AttributeData
+    public class Attributes
     {
         /// <summary>
         /// 速度
@@ -83,10 +83,21 @@ namespace GameServer.Battle
         public float DodgeRate;
 
         /// <summary>
+        /// 生命恢复
+        /// </summary>
+        public float HpRegen;
+
+        /// <summary>
+        /// 伤害吸血%
+        /// </summary>
+        public float HpSteal;
+
+
+        /// <summary>
         /// 增加属性
         /// </summary>
         /// <param name="data"></param>
-        public void Add(AttributeData data)
+        public void Add(Attributes data)
         {
             this.Speed += data.Speed;
             this.HPMax += data.HPMax;
@@ -102,12 +113,14 @@ namespace GameServer.Battle
             this.AGI += data.AGI;
             this.HitRate += data.HitRate;
             this.DodgeRate += data.DodgeRate;
+            this.HpRegen += data.HpRegen;
+            this.HpSteal += data.HpSteal;
         }
         /// <summary>
         /// 减少属性
         /// </summary>
         /// <param name="data"></param>
-        public void Sub(AttributeData data)
+        public void Sub(Attributes data)
         {
             this.Speed -= data.Speed;
             this.HPMax -= data.HPMax;
@@ -123,6 +136,8 @@ namespace GameServer.Battle
             this.AGI -= data.AGI;
             this.HitRate -= data.HitRate;
             this.DodgeRate -= data.DodgeRate;
+            this.HpRegen -= data.HpRegen;
+            this.HpSteal -= data.HpSteal;
         }
         /// <summary>
         /// 重置属性
@@ -143,6 +158,8 @@ namespace GameServer.Battle
             this.AGI = 0;
             this.HitRate = 0;
             this.DodgeRate = 0;
+            this.HpRegen = 0;
+            this.HpSteal = 0;
         }
 
         public override string ToString()

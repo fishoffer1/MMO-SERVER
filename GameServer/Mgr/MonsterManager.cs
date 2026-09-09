@@ -34,7 +34,7 @@ namespace GameServer.Mgr
             Monster monster = new Monster(tid, level, pos, dir);
             EntityManager.Instance.AddEntity(_space.Id, monster);
             monster.Info.SpaceId = _space.Id;
-            monster.Info.EntityId= monster.entityId;
+            monster.Info.Entity.Id= monster.entityId;
             _dict[monster.entityId] = monster;
             //和entityId保持一致
             monster.Id = monster.entityId;

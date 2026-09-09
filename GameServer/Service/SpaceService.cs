@@ -1,7 +1,8 @@
-﻿using Common.Proto;
+﻿using Common;
 using GameServer.Core;
 using GameServer.Mgr;
 using GameServer.Model;
+using Proto;
 using Serilog;
 using Summer;
 using Summer.Network;
@@ -41,7 +42,7 @@ namespace GameServer.Service
             if (space == null) return;
 
             //同步请求信息
-            NEntity netEntity = msg.EntitySync.Entity;
+            NetEntity netEntity = msg.EntitySync.Entity;
             //服务端实际的角色信息
             Entity serEntity = EntityManager.Instance.GetEntity(netEntity.Id);
             //计算距离
@@ -57,7 +58,7 @@ namespace GameServer.Service
             {
                 //拉回原位置
                 SpaceEntitySyncResponse resp = new SpaceEntitySyncResponse();
-                resp.EntitySync = new NEntitySync();
+                resp.EntitySync = new NetEntitySync();
                 resp.EntitySync.Entity = serEntity.EntityData;
                 resp.EntitySync.Force = true;
                 conn.Send(resp);

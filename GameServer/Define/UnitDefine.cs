@@ -11,18 +11,23 @@ public class UnitDefine
 	public int TID; // 单位类型
 	public string Name; // 名称
 	public string Resource; // 模型资源
-	public string Type; // 类别
+	public string Kind; // 类别
 	public string Decs; // 介绍
 	public int Speed; // 移动速度
 	public float HPMax; // 生命上限
 	public float MPMax; // 法力上限
 	public int InitLevel; // 初始等级
+	public int Energy; // 活力
 	public float AD; // 物攻
 	public float AP; // 魔攻
 	public float DEF; // 物防
 	public float MDEF; // 魔防
-	public float CRI; // 暴击率
-	public float CRD; // 暴击伤害
+	public float CRI; // 暴击率%
+	public float CRD; // 暴击伤害%
+	public float HitRate; // 命中率%
+	public float DodgeRate; // 闪避率
+	public float HpRegen; // 生命恢复/秒
+	public float HpSteal; // 伤害吸血%
 	public float STR; // 力量
 	public float INT; // 智力
 	public float AGI; // 敏捷

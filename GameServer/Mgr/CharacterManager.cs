@@ -1,5 +1,5 @@
 ﻿using Common.Database;
-using Common.Proto;
+using Common;
 using FreeSql;
 using GameServer.Model;
 using Summer;
@@ -20,9 +20,8 @@ namespace GameServer.Mgr
         IBaseRepository<DbCharacter> repo = Db.fsql.GetRepository<DbCharacter>();
         public CharacterManager()
         {
-            //每隔2秒保存一次数据
-            var repo = Db.fsql.GetRepository<DbCharacter>();
-            Schedule.Instance.AddTask(Save, 2);
+            //每隔5秒保存Data到数据库
+            Scheduler.Instance.AddTask(Save, 5);
 
         }
 

@@ -1,7 +1,7 @@
-﻿using Common.Proto;
-using GameServer.Model;
+﻿using GameServer.Model;
 using Summer;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,16 +10,17 @@ using System.Threading.Tasks;
 namespace GameServer.Mgr
 {
     /// <summary>
-    /// Entity管理器(角色，怪物，Npc，陷阱)
+    /// Entity管理器（角色，怪物，NPC，陷阱）
     /// </summary>
-    public class EntityManager:Singleton<EntityManager>
+    public class EntityManager : Singleton<EntityManager>
     {
         private int index = 1;
         //记录全部的Entity对象，<EntityId,Entity>
-        private Dictionary<int, Entity> AllEntities = new Dictionary<int, Entity>();
+        private ConcurrentDictionary<int, Entity> AllEntities = new();
         //记录场景里的Entity列表，<SpaceId,EntityList>
-        private Dictionary<int, List<Entity>> SpaceEntities = new Dictionary<int, List<Entity>>();
-        
+        private ConcurrentDictionary<int, List<Entity>> SpaceEntities = new();
+
+
         public EntityManager() { }
 
         public void AddEntity(int spaceId, Entity entity)
@@ -27,75 +28,88 @@ namespace GameServer.Mgr
             lock (this)
             {
                 //统一管理的对象分配ID
-                entity.EntityData.Id = NewEntityId();
+                entity.EntityData.Id = NewEntityId;
                 AllEntities[entity.entityId] = entity;
                 if (!SpaceEntities.ContainsKey(spaceId))
                 {
                     SpaceEntities[spaceId] = new List<Entity>();
                 }
-                SpaceEntities[spaceId].Add(entity);
+                ForUnits(spaceId, (list) => list.Add(entity));
             }
         }
 
-        public void RemoveEntity(int spaceId,Entity entity)
+        public void RemoveEntity(int spaceId, Entity entity)
         {
             lock (this)
             {
-                AllEntities.Remove(entity.entityId);
-                SpaceEntities[spaceId].Remove(entity);
+                AllEntities.TryRemove(entity.entityId, out var item);
+                ForUnits(spaceId, (list) => list.Remove(entity));
             }
         }
 
-        public bool Exist(int spaceId)
+        private void ForUnits(int spaceId, Action<List<Entity>> action)
         {
-            return AllEntities.ContainsKey(spaceId);
+            if (SpaceEntities.TryGetValue(spaceId, out var list))
+            {
+                if (list == null) return;
+                lock (list)
+                {
+                    action.Invoke(list);
+                }
+            }
+        }
+        /// <summary>
+        /// 更改角色所在场景
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="oldSpaceId"></param>
+        /// <param name="newSpaceId"></param>
+        public void ChangeSpace(Entity entity, int oldSpaceId, int newSpaceId)
+        {
+            if (oldSpaceId == newSpaceId) return;
+            ForUnits(oldSpaceId, (list) => list.Remove(entity));
+            ForUnits(newSpaceId, (list) => list.Add(entity));
+        }
+
+        public bool Exist(int entityId)
+        {
+            return AllEntities.ContainsKey(entityId);
         }
 
         public Entity GetEntity(int entityId)
         {
-           return AllEntities.GetValueOrDefault(entityId, null);
+            return AllEntities.GetValueOrDefault(entityId, null);
         }
-        
+
         //查找Entity对象
-        public List<T> GetEntityList<T>(int spaceId,Predicate<T> match) where T : Entity
+        public List<T> GetEntityList<T>(int spaceId, Predicate<T> match) where T : Entity
         {
-          return SpaceEntities[spaceId]
-                .OfType<T>()
+            if (!SpaceEntities.TryGetValue(spaceId, out var list)) return null;
+            return list?.OfType<T>()
                 .Where(entity => match.Invoke(entity))
                 .ToList();
         }
 
-        //查找最近的对象
-        public T GetNearest<T>(int spaceId , Vector3Int center ,int range) where T : Entity
-        {
-            Predicate<T> match = (e) =>
-            {
-                return Vector3Int.Distance(center, e.Position) <= range;
-            };
-            var entity = GetEntityList<T>(spaceId,match)
-                .OrderBy(e => Vector3Int.Distance(center , e.Position))
-                .FirstOrDefault();
-            return entity;
-        }
 
-        public int NewEntityId()
+        public int NewEntityId
         {
-            lock(this)
+            get
             {
-                    return index++; 
+                lock (this)
+                {
+                    return index++;
+                }
             }
-
-        }  
-        
+        }
 
         public void Update()
         {
-            foreach(var entity in AllEntities)
+            foreach (var entity in AllEntities)
             {
                 entity.Value.Update();
             }
         }
-            
+
     }
 }
 

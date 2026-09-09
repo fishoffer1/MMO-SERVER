@@ -1,4 +1,5 @@
 ﻿using Summer;
+using Proto;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -967,5 +968,17 @@ namespace GameServer.Core
 
         [MethodImpl(MethodImplOptions.InternalCall)]
         private static extern void RotateTowards_Injected(ref Vector3 current, ref Vector3 target, float maxRadiansDelta, float maxMagnitudeDelta, out Vector3 ret);
+
+
+        /* 类型转换 */
+        public static implicit operator Vec3(Vector3 v)
+        {
+            return new Vec3() { X = (int)v.x, Y = (int)v.y, Z = (int)v.z };
+        }
+        public static implicit operator Vector3(Vec3 v)
+        {
+            return new Vector3() { x = v.X, y = v.Y, z = v.Z };
+        }
+
     }
 }

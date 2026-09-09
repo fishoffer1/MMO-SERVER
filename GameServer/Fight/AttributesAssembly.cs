@@ -1,4 +1,5 @@
-﻿using Serilog;
+﻿using GameServer.Model;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,23 +8,30 @@ using System.Threading.Tasks;
 
 namespace GameServer.Battle
 {
-    public class Attributes
+    /// <summary>
+    /// 属性组装
+    /// </summary>
+    public class AttributesAssembly
     {
-        private AttributeData Basic;    //基础属性（初始+成长）
-        private AttributeData Equip;    //装备属性
-        private AttributeData Buffs;    //Buff属性
-        private AttributeData Final;    //最终属性
+        private Attributes Basic;    //基础属性（初始+成长）
+        private Attributes Equip;    //装备属性
+        private Attributes Buffs;    //Buff属性
+        public  Attributes Final;    //最终属性
 
-        public void Init(UnitDefine define, int level)
+
+        public void Init(Actor actor)
         {
 
-            Basic = new AttributeData();
-            Equip = new AttributeData();
-            Buffs = new AttributeData();
-            Final = new AttributeData();
+            Basic = new Attributes();
+            Equip = new Attributes();
+            Buffs = new Attributes();
+            Final = new Attributes();
+
+            var define = actor.Define;
+            var level = actor.Info.Level;
 
             //初始化属性
-            var Initial = new AttributeData();
+            var Initial = new Attributes();
             Initial.Speed = define.Speed;
             Initial.HPMax = define.HPMax;
             Initial.MPMax = define.MPMax;
@@ -36,9 +44,13 @@ namespace GameServer.Battle
             Initial.STR = define.STR;
             Initial.INT = define.INT;
             Initial.AGI = define.AGI;
+            Initial.HitRate = define.HitRate;
+            Initial.DodgeRate = define.DodgeRate;
+            Initial.HpRegen = define.HpRegen;
+            Initial.HpSteal = define.HpSteal;
 
             //成长属性
-            var Growth = new AttributeData();
+            var Growth = new Attributes();
             Growth.STR = define.GSTR * level;// 力量成长
             Growth.INT = define.GINT * level;// 智力成长
             Growth.AGI = define.GAGI * level;// 敏捷成长
@@ -55,7 +67,7 @@ namespace GameServer.Battle
             Final.Add(Buffs);
 
             //附加属性
-            var Extra = new AttributeData();
+            var Extra = new Attributes();
             Extra.HPMax = Final.STR * 5;
             Extra.AP = Final.INT * 1.5f;
             Final.Add(Extra);
@@ -65,8 +77,9 @@ namespace GameServer.Battle
             Log.Information("装备属性：{0}", Equip);
             Log.Information("Buff属性：{0}", Buffs);
             Log.Information("属性附加：{0}", Extra);
-            Log.Information("最终属性：{0}", Final);
+            
             */
+            Log.Information("最终属性：{0}", Final);
         }
     }
 }

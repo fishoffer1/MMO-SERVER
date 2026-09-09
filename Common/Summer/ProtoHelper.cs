@@ -7,7 +7,7 @@ using System.Reflection;
 using Google.Protobuf.Reflection;
 using Serilog;
 using System.Linq;
-using Common.Proto;
+using Proto;
 
 namespace Summer
 {

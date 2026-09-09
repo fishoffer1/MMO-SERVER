@@ -1,14 +1,17 @@
 ﻿using Common.Database;
-using Common.Proto;
+using Common;
 using GameServer.Core;
 using GameServer.Mgr;
 using GameServer.Model;
+using Proto;
 using Serilog;
 using Summer;
 using Summer.Network;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
+using System.Runtime.ConstrainedExecution;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -25,12 +28,41 @@ namespace GameServer.Service
         {
             MessageRouter.Instance.Subscribe<GameEnterRequest>(_GameEnterRequest);
             MessageRouter.Instance.Subscribe<UserLoginRequest>(_UserLoginRequest);
+            MessageRouter.Instance.Subscribe<UserRegisterRequest>(_UserRegisterRequest);
             MessageRouter.Instance.Subscribe<CharacterCreateRequest>(_CharacterCreateRequest);
             MessageRouter.Instance.Subscribe<CharacterListRequest>(_CharacterListRequest);  
             MessageRouter.Instance.Subscribe<CharacterDeleteRequest>(_CharacterDeleteRequest);  
             
             
         }
+
+        private void _UserRegisterRequest(Connection conn, UserRegisterRequest msg)
+        {
+            var count = Db.fsql.Select<DbPlayer>().Where(p => p.UserName == msg.Username)
+                .Count();
+            Log.Information("新用户注册：" + count);
+            UserRegisterResponse resp = new UserRegisterResponse();
+
+            if(count > 0)
+            {
+                resp.Code = 1;
+                resp.Message = "用户名已被占用";
+
+            }
+            else
+            {
+                DbPlayer dbPlayer = new DbPlayer()
+                {
+                    UserName = msg.Username,
+                    Password = msg.Password
+                };
+                Db.fsql.Insert(dbPlayer).ExecuteAffrows();
+                resp.Code = 6;
+                resp.Message = "注册成功";
+            }
+            conn.Send(resp);
+        }
+
         /// <summary>
         /// 删除角色的请求
         /// </summary>
@@ -63,7 +95,7 @@ namespace GameServer.Service
             CharacterListResponse listResp = new CharacterListResponse();
             foreach (var item in list)  
             {
-                listResp.CharacterList.Add(new NCharacter()
+                listResp.CharacterList.Add(new NetActor()
                 {
                     Id = item.Id,
                     Name = item.Name,
@@ -73,7 +105,7 @@ namespace GameServer.Service
                     Exp = item.Exp,
                     SpaceId = item.SpaceId,
                     Gold = item.Gold,
-                    //NEntity
+                    //NetEntity
                 });
             }
             conn.Send(listResp);    
@@ -87,7 +119,7 @@ namespace GameServer.Service
         /// <exception cref="NotImplementedException"></exception>
         private void _CharacterCreateRequest(Connection conn, CharacterCreateRequest msg)
         {
-            CharacterCreateResponse resp = new CharacterCreateResponse();
+            ChracterCreateResponse resp = new ChracterCreateResponse();
             Log.Information("创建角色:{0}", msg);
            var player =  conn.Get<Session>().DbPlayer;
             if(player == null)
@@ -182,37 +214,36 @@ namespace GameServer.Service
 
         private void _GameEnterRequest(Connection conn, GameEnterRequest msg)
         {
+            Log.Information($"有玩家进入游戏，角色ID={msg.CharacterId}");
 
-            Log.Information($"收到玩家进入游戏请求，角色ID：{msg.CharacterId}");
-            
-            //获取当前玩家
+            // 获取当前玩家
             var player = conn.Get<Session>().DbPlayer;
-            //查询数据库的角色
+            // 查询数据库的角色
             var dbRole = Db.fsql.Select<DbCharacter>()
                 .Where(t => t.PlayerId == player.Id)
                 .Where(t => t.Id == msg.CharacterId)
                 .First();
-            //把数据库角色变成游戏角色
-            Character old = CharacterManager.Instance.GetCharacter(msg.CharacterId);
-            if (old != null && old.conn != conn)
-            {
-                Log.Information("角色已在线，顶掉旧连接");
-                var sp = old.Space;
-                sp?.CharacterLeave(old.conn, old);
-                CharacterManager.Instance.RemoveCharacter(old.Id);
-                try { old.conn.Close(); } catch { }
-            }
-            Character character = CharacterManager.Instance.CreateCharacter(dbRole);
 
-            //通知玩家登录成功
+            Log.Information("dbRole={0}", dbRole);
+
+            // 把数据库角色变成游戏角色
+            Character chr = CharacterManager.Instance.CreateCharacter(dbRole);
+
+            //角色与conn关联
+            chr.conn = conn;
+            //角色存入session
+            chr.conn.Get<Session>().Character = chr;
+
+
+            /*//通知玩家登录成功
             GameEnterResponse resp = new GameEnterResponse();
             resp.Success = true;
-            resp.Entity = character.EntityData;
-            resp.Character = character.Info;
-            conn.Send(resp);
+            resp.Entity = chr.EntityData;
+            resp.Character = chr.Info;
+            conn.Send(resp);*/
             //将新角色加入到地图
             var space = SpaceService.Instance.GetSpace(dbRole.SpaceId);
-            space.CharacterJoin(conn, character);
+            space.CharacterJoin(chr);
         }
     }
 }

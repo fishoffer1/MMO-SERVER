@@ -4,16 +4,15 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using Summer.Network;
-
 using Common;
 using Serilog;
-using Common.Proto;
 using GameServer.Service;
 using Common.Database;
 using Summer;
 using GameServer.Model;
 using GameServer.Mgr;
 using GameServer.AI;
+using Proto;
 
 
 
@@ -46,8 +45,11 @@ namespace GameServer
             SpaceService spaceService = SpaceService.Instance;
             spaceService.Start();
             Log.Debug("地图服务启动完成");
+            BattleService.Instance.Start();
+            Log.Debug("战斗服务启动完成");
 
-            Schedule.Instance.Start();
+
+            Scheduler.Instance.Start();
             Log.Debug("中心计时器启动");
 
            
@@ -55,7 +57,7 @@ namespace GameServer
             space.MonsterManager.Create(1002,3, new Vector3Int(125807, 0, 165282),Vector3Int.zero);
             //mon.AI = new MonsterAI(mon);
 
-            Schedule.Instance.AddTask(() => {
+            Scheduler.Instance.AddTask(() => {
                 EntityManager.Instance.Update();
                 SpaceManager.Instance.Update();
             }, 0.02f);
