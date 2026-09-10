@@ -90,7 +90,7 @@ namespace GameServer.Network
             if (space != null) 
             { 
                
-                space.CharacterLeave(chr);
+                space.EntityLeave(chr);
                 CharacterManager.Instance.RemoveCharacter(chr.Id);
             }
         }

@@ -1,4 +1,5 @@
-﻿using Common.Database;
+﻿
+using GameServer.Database;
 using GameServer.Model;
 using System;
 using System.Collections.Generic;

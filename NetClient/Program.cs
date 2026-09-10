@@ -7,7 +7,7 @@ using System.Text;
 using Summer;
 using Common;
 using Serilog;
-using Common.Proto;
+using Proto;
 
 //初始化日志环境
 Log.Logger = new LoggerConfiguration()
@@ -28,7 +28,7 @@ socket.Connect(ipe);
 Log.Information("成功连接到服务器");
 
 
-Common.Proto.NVector3 vector = new Common.Proto.NVector3();
+Proto.Vec3 vector = new Proto.Vec3();
 vector.X = 7;
 vector.Y = 8;
 vector.Z = 9;
@@ -41,14 +41,14 @@ Connection conn = new Connection(socket);
 //用户登录消息
 
 
-var msg = new Common.Proto.UserLoginRequest();
+var msg = new Proto.UserLoginRequest();
 msg.Username = "阿斯顿";
 msg.Password = "123456";
 conn.Send(msg);
 conn.Send(msg);
 conn.Send(msg);
 conn.Send(msg);
-Common.Proto.NVector3 v = new Common.Proto.NVector3() { X=3, Y=4, Z=5 };
+Proto.Vec3 v = new Proto.Vec3() { X=3, Y=4, Z=5 };
 conn.Send(v);
 conn.Send(v);
 conn.Send(v);

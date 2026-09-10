@@ -104,11 +104,15 @@ namespace GameServer.AI
                     fsm.ChangeState("goback");
                     return;
                 }
-                if (n < 1200)
+                if (n < 1500)
                 {
-                    if(mon.State==EntityState.Move)
+                    if (mon.State == Proto.EntityState.Move)
+                    {
                         mon.StopMove();
-                    Log.Information("发起攻击");
+                    }
+
+                    //Log.Information("发起攻击");
+                    mon.Attack(mon.target);
                 }
                 else
                 {

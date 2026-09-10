@@ -79,25 +79,27 @@ namespace GameServer.Model
         }
 
         public override void Update()
-        { 
+        {
+            if (IsDeath) return;
             base.Update();
             AI?.Update();
-            if(State == EntityState.Move)
+            if (State == EntityState.Move)
             {
-                //移动反向
+                //移动方向
                 var dir = (moveTarget - movePosition).normalized;
-                this.Direction = LookRotation(dir)*Y1000;
+                this.Direction = LookRotation(dir) * Y1000;
                 float dist = Speed * Time.deltaTime;
+                //Log.Information("距离 {0}", dist);
                 if (Vector3.Distance(moveTarget, movePosition) < dist)
                 {
-                    StopMove(); 
+                    StopMove();
                 }
                 else
                 {
                     movePosition += dist * dir;
                 }
                 this.Position = movePosition;
-               
+
             }
         }
 
@@ -125,6 +127,14 @@ namespace GameServer.Model
             float z = rand.NextSingle() * 2f - 1f;
             Vector3 dir = new Vector3(x,0,z).normalized;
             return initPosition + dir * range * rand.NextSingle();
+        }
+
+        internal void Attack(Actor target)
+        {
+            var skill = skillMgr.Skills.FirstOrDefault(s => s.IsNormal);
+            if (skill == null) return;
+            if (skill.State != Battle.Skill.Stage.None) return;
+            this.Spell.SpellTarget(skill.Def.ID, target.entityId);
         }
     }
 }

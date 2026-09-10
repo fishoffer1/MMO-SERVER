@@ -1,4 +1,4 @@
-﻿using Common.Database;
+﻿using GameServer.Database;
 using Common;
 using FreeSql;
 using GameServer.Model;
@@ -58,7 +58,10 @@ namespace GameServer.Mgr
         {
             foreach(var chr in Characters.Values)
             {
-             
+                //同步内存属性到数据库对象，否则复活/战斗后的血量不会落库
+                chr.Data.Hp = (int)chr.Info.Hp;
+                chr.Data.Mp = (int)chr.Info.Mp;
+
                 chr.Data.X = chr.Position.x;
                 chr.Data.Y = chr.Position.y;
                 chr.Data.Z = chr.Position.z;

@@ -29,7 +29,7 @@ namespace GameServer.Mgr
         /// </summary>
         /// <param name="spaceId"></param>
         /// <returns></returns>
-        public Space? GetSpace(int spaceId)
+        public Space GetSpace(int spaceId)
         {
             return dict.GetValueOrDefault(spaceId, null);
         }

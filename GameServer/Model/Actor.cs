@@ -1,5 +1,4 @@
-﻿using Common;
-using Common.Summer.Core;
+﻿using Common.Summer.Core;
 using GameServer.Battle;
 using GameServer.Fight;
 using GameServer.Mgr;
@@ -56,19 +55,23 @@ namespace GameServer.Model
             : base(position, direction)
         {
             
-            this.Define = DataManager.Instance.Units[tid];
-            this.Info.Name = Define.Name;
             this.Info.Tid = tid;
             this.Info.Type = type;
             this.Info.Level = level;
             this.Info.Entity = this.EntityData;
-            this.Info.Hp = (int)Define.HPMax;
-            this.Info.Mp = (int)Define.MPMax;
-            this.Speed = Define.Speed;
 
-            this.skillMgr = new(this);
-            this.Attr.Init(this);
-            this.Spell = new Spell(this);
+            if (type != EntityType.Item)
+            {
+                this.Define = DataManager.Instance.Units[tid];
+                this.Info.Name = Define.Name;
+                this.Info.Hp = (int)Define.HPMax;
+                this.Info.Mp = (int)Define.MPMax;
+                this.Speed = Define.Speed;
+
+                this.skillMgr = new(this);
+                this.Attr.Init(this);
+                this.Spell = new Spell(this);
+            }
         }
 
         public void OnEnterSpace(Space _space)
@@ -100,12 +103,12 @@ namespace GameServer.Model
             if (_space != Space)
             {
                 //1.退出当前场景
-                Space.CharacterLeave(chr);
+                Space.EntityLeave(chr);
                 //2.设置坐标和方向
                 chr.Position = pos;
                 chr.Direction = dir;
                 //3.进入新场景
-                _space.CharacterJoin(chr);
+                _space.EntityEnter(chr);
             }
             else
             {
@@ -117,7 +120,7 @@ namespace GameServer.Model
 
         public override void Update()
         {
-            this.skillMgr.Update();
+            this.skillMgr?.Update();
         }
 
         //杀死此单位

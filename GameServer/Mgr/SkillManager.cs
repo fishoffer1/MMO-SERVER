@@ -28,14 +28,15 @@ public class SkillManager
 
     public void InitSkills()
     {
-        //初始化技能信息，正常是通过读取数据库来加载技能信息
-        if(this.owner.Define.TID == 1)
+        //角色按单位类型(UnitDefine.TID)加载技能；怪物加载通用野怪技能(SkillDefine.TID==0)
+        //正常是通过读取数据库来加载技能信息
+        bool isMonster = this.owner is Monster;
+        foreach (var def in DataManager.Instance.Skills.Values)
         {
-            loadSkill(4, 7, 8);
-        }
-        if(this.owner.Define.TID == 2)
-        {
-            loadSkill(9, 10);
+            if (def.TID == this.owner.Define.TID || (isMonster && def.TID == 0))
+            {
+                loadSkill(def.Code);
+            }
         }
     }
 
@@ -43,16 +44,16 @@ public class SkillManager
     {
         foreach(int skid in ids)
         {
-            owner.Info.Skills.Add(new SkillInfo() { Id = skid });
             var skill = new Skill(owner, skid);
             Skills.Add(skill);
+            owner.Info.Skills.Add(new SkillInfo() { Id = skill.Def.Code });
             Log.Information("角色[{0}]加载技能[{1}-{2}]", owner.Name, skill.Def.ID, skill.Def.Name);
         }
     }
 
     public Skill GetSkill(int id)
     {
-        return Skills.FirstOrDefault(s => s.Def.ID == id);
+        return Skills.FirstOrDefault(s => s.Def.Code == id);
     }
 
     public void Update()

@@ -38,7 +38,7 @@ namespace GameServer.Mgr
             _dict[monster.entityId] = monster;
             //和entityId保持一致
             monster.Id = monster.entityId;
-            this._space.MonsterEnter(monster);
+            this._space.EntityEnter(monster);
             return monster;
         }
     }

@@ -175,7 +175,7 @@ public class Skill
         Damage dmg = new Damage();
         dmg.AttackerId = Owner.entityId;
         dmg.TargetId = target.entityId;
-        dmg.SkillId = Def.ID;
+        dmg.SkillId = Def.Code;
         //技能的物攻和法攻
         var ad = Def.AD + a.AD * Def.ADC;
         var ap = Def.AP + a.AP * Def.APC;

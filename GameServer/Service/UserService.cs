@@ -1,4 +1,4 @@
-﻿using Common.Database;
+﻿using GameServer.Database;
 using Common;
 using GameServer.Core;
 using GameServer.Mgr;
@@ -31,14 +31,15 @@ namespace GameServer.Service
             MessageRouter.Instance.Subscribe<UserRegisterRequest>(_UserRegisterRequest);
             MessageRouter.Instance.Subscribe<CharacterCreateRequest>(_CharacterCreateRequest);
             MessageRouter.Instance.Subscribe<CharacterListRequest>(_CharacterListRequest);  
-            MessageRouter.Instance.Subscribe<CharacterDeleteRequest>(_CharacterDeleteRequest);  
-            
-            
+            MessageRouter.Instance.Subscribe<CharacterDeleteRequest>(_CharacterDeleteRequest);
+            MessageRouter.Instance.Subscribe<ReviveRequest>(_ReviveRequest);
+
+
         }
 
         private void _UserRegisterRequest(Connection conn, UserRegisterRequest msg)
         {
-            var count = Db.fsql.Select<DbPlayer>().Where(p => p.UserName == msg.Username)
+            var count = Db.fsql.Select<DbPlayer>().Where(p => p.Username == msg.Username)
                 .Count();
             Log.Information("新用户注册：" + count);
             UserRegisterResponse resp = new UserRegisterResponse();
@@ -53,7 +54,7 @@ namespace GameServer.Service
             {
                 DbPlayer dbPlayer = new DbPlayer()
                 {
-                    UserName = msg.Username,
+                    Username = msg.Username,
                     Password = msg.Password
                 };
                 Db.fsql.Insert(dbPlayer).ExecuteAffrows();
@@ -191,7 +192,7 @@ namespace GameServer.Service
         private void _UserLoginRequest(Connection conn, UserLoginRequest msg)
         {
            var dbPlayer= Db.fsql.Select<DbPlayer>()
-                            .Where(p => p.UserName == msg.Username)
+                            .Where(p => p.Username == msg.Username)
                             .Where(p => p.Password == msg.Password)
                             .First();
             Log.Information("登录结果：" + dbPlayer);
@@ -243,7 +244,27 @@ namespace GameServer.Service
             conn.Send(resp);*/
             //将新角色加入到地图
             var space = SpaceService.Instance.GetSpace(dbRole.SpaceId);
-            space.CharacterJoin(chr);
+            space.EntityEnter(chr);
+        }
+
+        /// <summary>
+        /// 复活请求：回城复活（新手村）
+        /// </summary>
+        private void _ReviveRequest(Connection conn, ReviveRequest msg)
+        {
+            var chr = conn.Get<Session>().Character;
+            if (chr == null) return;
+            if (!chr.IsDeath) return;
+
+            //回满HP/MP并置为Free，经PropertyUpdate广播给客户端
+            chr.Revive();
+
+            //传送回新手村
+            var town = SpaceService.Instance.GetSpace(1);
+            if (town != null)
+            {
+                chr.TelportSpace(town, Vector3Int.zero);
+            }
         }
     }
 }
